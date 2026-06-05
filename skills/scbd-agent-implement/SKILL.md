@@ -118,17 +118,21 @@ No eligible ticket found.
       --title "<ticket-key>: <ticket summary>" \
       --body "$(cat <<'EOF'
     ## Summary
-    Closes <ticket-key>
+    Closes (<ticket-key>)[<url-to-the-ticket>]
 
     <!-- describe what was done -->
 
     ## Testing
     <!-- describe how to test -->
+
+    ---
+    🤖 *Posted by AFK Agent on behalf of @<GitHub username>*
     EOF
     )" \
       --base main
 ```
-12. Transition the Jira ticket status to **`PEER REVIEW`**.
+12. Transition the Jira ticket status to **`PEER REVIEW`**
+13. Remove the label `ready-for-agent` and add label `ready-for-human`
 
 ---
 
