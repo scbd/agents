@@ -90,7 +90,7 @@ No actionable PEER REVIEW ticket found.
 
 *Execute this phase only if the selected ticket's PR is merged.*
 
-5. Transition the Jira ticket status to **`Completed`**.
+5. Transition the Jira ticket status to **`Completed`**, remove the label `ready-for-agent` and add label `ready-for-human`
 6. Stop — run is done.
 
 ---
@@ -119,14 +119,15 @@ No actionable PEER REVIEW ticket found.
       > ✅ Implemented — <one sentence explanation of what was done>. #done
       >
       > ---
-      > 🤖 *Posted by AFK Agent on behalf of @sbilodeau*
+      > 🤖 *Posted by AFK Agent on behalf of @<GitHub username>*
     - **If the change is not feasible or not relevant:** do not implement it. Reply on the PR comment:
       > ❌ Not implemented — <clear explanation of why this change is not appropriate or feasible>. #done
       >
       > ---
-      > 🤖 *Posted by AFK Agent on behalf of @sbilodeau*
+      > 🤖 *Posted by AFK Agent on behalf of @<GitHub username>*
 11. Push all commits once all comments are addressed.
 12. Ensure the test suite is green after the full pass.
+13. Remove the label `ready-for-agent` and add label `ready-for-human` to the JIRA ticket.
 
 ---
 
