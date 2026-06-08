@@ -21,12 +21,20 @@ The `name` must match the directory name. The `description` is what the harness 
 
 ## Available skills
 
-| Skill                  | Description                                                  | Dependencies          |
-| ---------------------- | ------------------------------------------------------------ | --------------------- |
-| `scbd-agent-implement` | Pick and implement the next unblocked Jira ticket end-to-end | `karpathy-guidelines` |
-| `scbd-agent-review`    | Address peer-review comments on in-progress PRs              | `karpathy-guidelines` |
+| Skill                  | Description                                                                                                | Dependencies          |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------- |
+| `scbd-agent-implement` | Pick and implement the next unblocked Jira ticket end-to-end                                               | `karpathy-guidelines` |
+| `scbd-agent-review`    | Address peer-review comments on in-progress PRs                                                            | `karpathy-guidelines` |
+| `scbd-push-to-jira`    | Upload local markdown issues from `.scratch/<feature-slug>/` to Jira (Epic + Stories + blocked-by links)  | —                     |
 
-Both skills accept `<epic> [component] [label]` arguments. They read `scbd_component:` from the **target project's** `AGENTS.md` as a default component filter when none is passed.
+`scbd-agent-implement` and `scbd-agent-review` accept `<epic> [component] [label]` arguments. They read `scbd_component:` from the **target project's** `AGENTS.md` as a default component filter when none is passed.
+
+`scbd-push-to-jira` bridges the mattpocock planning tools and the `scbd-agent-*` implementation tools:
+
+1. **`/to-prd`** (mattpocock) — generates a PRD and issue files, saves them to `.scratch/<feature-slug>/` on local disk.
+2. **Human review** — the developer reviews and edits `.scratch/<feature-slug>/` directly, optionally with agent assistance. The local-markdown save exists specifically for this gate: nothing reaches Jira until a human has signed off. This step is required.
+3. **`/scbd-push-to-jira <feature-slug>`** — reads those local files and creates one Epic and one Story per issue in Jira, wires `Blocks` links, and writes Jira keys back into every markdown file.
+4. **`/scbd-agent-implement`** / **`/scbd-agent-review`** — pick up the Jira tickets created in step 3 and implement them.
 
 ## Installing dependencies
 
@@ -44,6 +52,10 @@ npx skills update -g
 /scbd-agent-implement DEV-20               # uses scbd_component from AGENTS.md
 /scbd-agent-implement DEV-20 Gaia/KM
 /scbd-agent-review DEV-20 Gaia/KM my-label
+
+/scbd-push-to-jira my-feature-slug
+/scbd-push-to-jira my-feature-slug project=DEV component="Gaia/KM" label=ready-for-agent
+/scbd-push-to-jira my-feature-slug --force   # re-upload tickets that already have Jira keys
 ```
 
 ## Key conventions enforced by the skills
@@ -56,10 +68,11 @@ npx skills update -g
 
 ## Setting up a new project to use these skills
 
-Add this line to the target project's `AGENTS.md`:
+Add these lines to the target project's `AGENTS.md`:
 
 ```
-scbd_component: Your/Component
+scbd_component:     Your/Component    # used by scbd-agent-* and scbd-push-to-jira
+scbd_jira_project:  DEV               # used by scbd-push-to-jira (avoids being asked each run)
 ```
 
 ## Adding a new skill

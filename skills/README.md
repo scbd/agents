@@ -13,12 +13,24 @@ Each skill follows this contract:
 
 ## Available skills
 
-| Skill                  | Description                                                  | Dependencies          |
-| ---------------------- | ------------------------------------------------------------ | --------------------- |
-| `scbd-agent-implement` | Pick and implement the next unblocked Jira ticket end-to-end | `karpathy-guidelines` |
-| `scbd-agent-review`    | Address peer-review comments on in-progress PRs              | `karpathy-guidelines` |
+| Skill                  | Description                                                                                                    | Dependencies          |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `scbd-agent-implement` | Pick and implement the next unblocked Jira ticket end-to-end                                                   | `karpathy-guidelines` |
+| `scbd-agent-review`    | Address peer-review comments on in-progress PRs                                                                | `karpathy-guidelines` |
+| `scbd-push-to-jira`    | Upload local markdown issues from `.scratch/<feature-slug>/` to Jira (Epic + Stories + blocked-by links)      | —                     |
 
-Both skills accept `<epic> [component] [label]` arguments and read a project-level `scbd_component:` default from the target project's `AGENTS.md` when no component argument is passed.
+`scbd-agent-implement` and `scbd-agent-review` accept `<epic> [component] [label]` arguments and read a project-level `scbd_component:` default from the target project's `AGENTS.md` when no component argument is passed.
+
+### End-to-end planning → implementation workflow
+
+`scbd-push-to-jira` bridges the [mattpocock/skills](https://github.com/mattpocock/skills) planning tools and the `scbd-agent-*` implementation tools:
+
+1. **`/to-prd`** (mattpocock) — generates a PRD and individual issue files and saves them to `.scratch/<feature-slug>/` on local disk.
+2. **Human review** — the developer reviews and edits `.scratch/<feature-slug>/` directly, optionally with agent assistance. The local-markdown save exists specifically for this gate: nothing reaches Jira until a human has signed off. This step is required.
+3. **`/scbd-push-to-jira <feature-slug>`** — reads those local files and creates one Epic (from `PRD.md`) and one Story per issue file in Jira, wires `Blocks` links, and writes the resulting Jira keys back into every markdown file.
+4. **`/scbd-agent-implement`** / **`/scbd-agent-review`** — pick up the Jira tickets created in step 3 and implement them.
+
+Any issue file that already contains a `## Jira` section is skipped automatically; pass `--force` to re-upload.
 
 ## Invoking skills
 
@@ -29,14 +41,20 @@ Both skills accept `<epic> [component] [label]` arguments and read a project-lev
 
 /scbd-agent-review DEV-20
 /scbd-agent-review DEV-20 Gaia/KM
+
+/scbd-push-to-jira meeting-documents-nestjs-migration
+/scbd-push-to-jira meeting-documents-nestjs-migration project=DEV
+/scbd-push-to-jira meeting-documents-nestjs-migration project=DEV component="Gaia/Km" label=ready-for-agent
+/scbd-push-to-jira meeting-documents-nestjs-migration --force    # re-upload tickets that already have Jira keys
 ```
 
 ## Setting up a new project
 
-Add this line to the project's `AGENTS.md` so the skills can pick up a default component:
+Add these lines to the project's `AGENTS.md` so skills can pick up defaults:
 
 ```
-scbd_component: Your/Component
+scbd_component:     Your/Component    # used by all scbd-agent-* and scbd-push-to-jira
+scbd_jira_project:  DEV               # used by scbd-push-to-jira
 ```
 
 ## External dependencies
