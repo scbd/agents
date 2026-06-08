@@ -111,20 +111,32 @@ No actionable PEER REVIEW ticket found.
 
 9. Load all review comments on the PR that do not yet have a reply containing `#done`.
 10. For each unaddressed comment, analyse it:
+    - If the comment is **asking about the code, requiring an explanation, or wanting clarification:** then provide an answer.
     - **If the change is feasible and relevant:** implement it following the `/karpathy-guidelines` skill. Run the full test suite — do not proceed if tests fail. Commit with:
 ```
       fix: address review comment — <short description>
 ```
       Then reply on the PR comment:
-      > ✅ Implemented — <one sentence explanation of what was done>. #done
+      
+    - If the comment was a **question/confirmation/clarification and an answer is sufficient** reply on the PR comment:
+      > ✔️ Response — <one sentence response>. #done
       >
       > ---
       > 🤖 *Posted by AFK Agent on behalf of @<GitHub username>*
-    - **If the change is not feasible or not relevant:** do not implement it. Reply on the PR comment:
+
+    - If the **change is not feasible or not relevant:** do not implement it. Reply on the PR comment:
       > ❌ Not implemented — <clear explanation of why this change is not appropriate or feasible>. #done
       >
       > ---
       > 🤖 *Posted by AFK Agent on behalf of @<GitHub username>*
+
+    - Otherwise:
+      > ✅ Implemented — <one sentence explanation of what was done>. #done
+      >
+      > ---
+      > 🤖 *Posted by AFK Agent on behalf of @<GitHub username>*
+
+
 11. Push all commits once all comments are addressed.
 12. Ensure the test suite is green after the full pass.
 13. Remove the label `ready-for-agent` and add label `ready-for-human` to the JIRA ticket.
