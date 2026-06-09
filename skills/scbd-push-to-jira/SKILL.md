@@ -136,10 +136,10 @@ FORCE:      <yes/no>
 **If the Epic was marked skip in step 9, skip this entire phase** — go directly to Phase 4 using the existing `EPIC_KEY`.
 
 11. Discover the fields needed to create an Epic in the target project:
-    - Call `mcp__claude_ai_Atlassian__getJiraProjectIssueTypesMetadata` with the resolved project key to get the `Epic` issue type `id`.
-    - Call `mcp__claude_ai_Atlassian__getJiraIssueTypeMetaWithFields` for that type to find the field ID for "Epic Name" (commonly `customfield_10011` but varies per instance). You need this field to set the epic name alongside `summary`.
+    - Call `JIRA  getJiraProjectIssueTypesMetadata` with the resolved project key to get the `Epic` issue type `id`.
+    - Call `JIRA getJiraIssueTypeMetaWithFields` for that type to find the field ID for "Epic Name" (commonly `customfield_10011` but varies per instance). You need this field to set the epic name alongside `summary`.
 
-12. Call `mcp__claude_ai_Atlassian__createJiraIssue` to create the Epic:
+12. Call `JIRA createJiraIssue` to create the Epic:
 
     | Field       | Value                                             |
     |-------------|---------------------------------------------------|
