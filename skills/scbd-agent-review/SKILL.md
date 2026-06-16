@@ -111,7 +111,7 @@ No actionable PEER REVIEW ticket found.
 
 9. Load all review comments on the PR that do not yet have a reply containing `#done`.
 10. For each unaddressed comment, analyse it:
-    - If the comment is **asking about the code, requiring an explanation, or wanting clarification:** then provide an answer.
+    - If the comment is **asking about the code, requiring an explanation, wanting clarification or challenging the approach:** then determine if an answer can be provided. DON'T BE TOO EAGER TO IMPLEMENT A CHANGE!
     - **If the change is feasible and relevant:** implement it following the `/karpathy-guidelines` skill. Run the full test suite — do not proceed if tests fail. Commit with:
 ```
       fix: address review comment — <short description>
