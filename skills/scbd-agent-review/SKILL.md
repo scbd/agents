@@ -1,6 +1,6 @@
 ---
 name: scbd-agent-review
-description: Address peer-review comments for the next Jira ticket in PEER REVIEW status. Closes out merged PRs and handles change-request cycles following karpathy-guidelines.
+description: Address peer-review comments for the next Jira ticket in PEER REVIEW status, including optional interactive phased mode with sub-agents for review triage, feedback handling, and verification. Uses scbd-agent-pr-screenshot for screenshot or visual-proof updates when review feedback affects UI, closes out merged PRs, and handles change-request cycles following karpathy-guidelines.
 ---
 
 # scbd-agent-review
@@ -139,7 +139,7 @@ No actionable PEER REVIEW ticket found.
 
 11. Push all commits once all comments are addressed.
 12. Ensure the test suite is green after the full pass.
-13. Remove the label `ready-for-agent` and add label `ready-for-human` to the JIRA ticket.
+13. If review feedback requests screenshots, visual proof, or changes user-facing UI, use the `/scbd-agent-pr-screenshot` skill to update the PR's `## User-Facing Changes` section or add a prose fallback when screenshots are not practical.
 
 ---
 
