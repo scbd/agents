@@ -113,7 +113,7 @@ When the user asks to work interactively, phase implementation, or use sub-agent
 
 - **Phase 3.1 — Branch + Plan PR**: create/switch to the feature branch, inspect enough code to write a concrete implementation plan, save the plan in the project, commit it, push, and open/update a draft PR that links the plan. Do not implement feature code.
 - **Phase 3.2 — Plan Feedback**: address user or reviewer feedback on the plan. Update the plan/PR, commit and push if files changed. Do not start implementation until the user approves moving on.
-- **Phase 3.3 — Implementation**: implement the approved plan, commit logical changes, run verification, update the draft PR body and screenshots, then report back. Do not transition Jira or mark the PR ready until the user confirms.
+- **Phase 3.3 — Implementation**: implement the approved plan, delete the plan, commit logical changes, run verification, update the draft PR body and screenshots, then report back. Do not transition Jira or mark the PR ready until the user confirms.
 
 For each interactive part:
 
