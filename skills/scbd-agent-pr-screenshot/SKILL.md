@@ -31,12 +31,16 @@ Create PR-ready evidence for user-facing UI changes.
 5. Host images according to project preference.
    - Keep screenshot artifacts out of the repo unless the project explicitly stores PR assets.
    - For GitHub Gist hosting, `gh gist create` rejects binary PNGs. Wrap each PNG in a text SVG with an embedded `data:image/png;base64,...`, create a secret gist, and embed the gist raw SVG URL in the PR body.
+   - `gh gist create` creates secret gists by default. Some installed versions do not support `--secret`; use `--public` only when a public gist is explicitly wanted.
+   - After creating a gist, fetch the exact raw URLs with `gh api gists/<gist-id> --jq '.files | to_entries[] | [.key, .value.raw_url] | @tsv'`. Do not guess raw URLs from the web URL.
    - If repo-hosting screenshots temporarily, remove them once gist-hosted or otherwise externally hosted.
 
 6. Update the PR.
    - Add or update `## User-Facing Changes` with concise bullets and embedded screenshots when available.
    - Include the screenshot gist/link when using external hosting.
    - Mention screenshot generation in `## Testing`, including if the screenshot spec/script was temporary and removed.
+   - When generating a Markdown PR body from a shell command, avoid JavaScript template literals if the Markdown contains backticks. Build the body from an array of strings or write it to a temp file with a safer editor/script, then patch the PR from that file.
+   - Verify the PR body after patching, then remove temporary specs/scripts and confirm `git status --short` is clean unless the screenshot test is intentionally kept.
 
 ## SVG Wrapper Pattern
 

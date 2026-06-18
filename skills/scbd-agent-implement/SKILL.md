@@ -103,6 +103,7 @@ No eligible ticket found.
    [optional body referencing ticket key]
 ```
    Preferred types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`.
+
 10. Before considering implementation done, run the full test suite and confirm all tests pass.
     - If tests fail, fix them before proceeding — do not move to Phase 4 with a red test suite.
     - If the feature requires new tests, write them as part of the implementation (not as an afterthought).
@@ -111,7 +112,7 @@ No eligible ticket found.
 
 When the user asks to work interactively, phase implementation, or use sub-agents for each part, split Phase 3 and stop for instructions after each part:
 
-- **Phase 3.1 — Branch + Plan PR**: create/switch to the feature branch, inspect enough code to write a concrete implementation plan, save the plan in the project, commit it, push, and open/update a draft PR that links the plan. Do not implement feature code.
+- **Phase 3.1 — Branch + Plan PR**: create/switch to the feature branch, inspect enough code to write a concrete implementation plan, save the plan in the project, commit it, push, and open/update a draft PR that links the plan. Add a comment to the Jira ticket that includes a link to the PR. Do not implement feature code.
 - **Phase 3.2 — Plan Feedback**: address user or reviewer feedback on the plan. Update the plan/PR, commit and push if files changed. Do not start implementation until the user approves moving on.
 - **Phase 3.3 — Implementation**: implement the approved plan, delete the plan, commit logical changes, run verification, update the draft PR body and screenshots, then report back. Do not transition Jira or mark the PR ready until the user confirms.
 
@@ -145,7 +146,7 @@ For each interactive part:
     )" \
       --base main
 ```
-12. Transition the Jira ticket status to **`PEER REVIEW`**
+12. Transition the Jira ticket status to **`PEER REVIEW`** and add a comment linking to the PR
 13. If there were user-facing impacts, add a PR section named `## User-Facing Changes`.
     - Use the `/scbd-agent-pr-screenshot` skill to capture, crop, verify, host, and link screenshots when the project supports them.
     - If the project does not have a practical screenshot path, use `/scbd-agent-pr-screenshot` for the prose fallback and testing note.

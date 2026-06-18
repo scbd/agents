@@ -146,6 +146,7 @@ No actionable PEER REVIEW ticket found.
 ## Constraints & Reminders
 
 - Never push directly to `main`.
+- Make sure the local branch is the correct one and is up to date with origin (see phase 1 step 2).
 - One ticket per agent run.
 - Always reply to every unaddressed comment with a `#done` marker — this is what prevents the review loop from re-processing the same comment on the next run.
 - Do not change ticket status during Phase 4 — status remains `PEER REVIEW` until the PR is merged (handled on a future run via Phase 2).
