@@ -56,7 +56,7 @@ scbd_plan_dir: docs/plans
 - **Iteration boundary:** Every epic invocation performs exactly one iteration; an external caller owns repetition
 - **Mode behavior:** Interactive pauses at phase boundaries; AFK completes the same iteration without routine pauses
 - **External ownership:** Focused skills have read-only Jira, git, and GitHub access; only the epic skill mutates them or hosts evidence
-- **PR state:** Plan PRs start as drafts, become ready after implementation, and never target changes directly to `main`
+- **PR state:** Agents never mark PRs ready; new PRs stay draft while the human and agent settle the initial implementation, only a human opens them for wider team review, and agents never push directly to `main`
 - **Jira sync:** Ticket status (`IN PROGRESS` → `PEER REVIEW` → `Completed`) stays synchronized with PR state
 
 ## External dependencies
