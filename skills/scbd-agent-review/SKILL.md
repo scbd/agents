@@ -1,6 +1,6 @@
 ---
 name: scbd-agent-review
-description: Address peer-review comments for the next Jira ticket in PEER REVIEW status. Closes out merged PRs and handles change-request cycles following karpathy-guidelines.
+description: Address peer-review comments for the next Jira ticket in PEER REVIEW status, including optional interactive phased mode with sub-agents for review triage, feedback handling, and verification. Uses scbd-agent-pr-screenshot for screenshot or visual-proof updates when review feedback affects UI, closes out merged PRs, and handles change-request cycles following karpathy-guidelines.
 ---
 
 # scbd-agent-review
@@ -111,7 +111,7 @@ No actionable PEER REVIEW ticket found.
 
 9. Load all review comments on the PR that do not yet have a reply containing `#done`.
 10. For each unaddressed comment, analyse it:
-    - If the comment is **asking about the code, requiring an explanation, or wanting clarification:** then provide an answer.
+    - If the comment is **asking about the code, requiring an explanation, wanting clarification or challenging the approach:** then determine if an answer can be provided. DON'T BE TOO EAGER TO IMPLEMENT A CHANGE!
     - **If the change is feasible and relevant:** implement it following the `/karpathy-guidelines` skill. Run the full test suite — do not proceed if tests fail. Commit with:
 ```
       fix: address review comment — <short description>
@@ -139,13 +139,14 @@ No actionable PEER REVIEW ticket found.
 
 11. Push all commits once all comments are addressed.
 12. Ensure the test suite is green after the full pass.
-13. Remove the label `ready-for-agent` and add label `ready-for-human` to the JIRA ticket.
+13. If review feedback requests screenshots, visual proof, or changes user-facing UI, use the `/scbd-agent-pr-screenshot` skill to update the PR's `## User-Facing Changes` section or add a prose fallback when screenshots are not practical.
 
 ---
 
 ## Constraints & Reminders
 
 - Never push directly to `main`.
+- Make sure the local branch is the correct one and is up to date with origin (see phase 1 step 2).
 - One ticket per agent run.
 - Always reply to every unaddressed comment with a `#done` marker — this is what prevents the review loop from re-processing the same comment on the next run.
 - Do not change ticket status during Phase 4 — status remains `PEER REVIEW` until the PR is merged (handled on a future run via Phase 2).

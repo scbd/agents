@@ -1,6 +1,6 @@
 ---
 name: scbd-agent-implement
-description: Pick and implement the next unblocked Jira ticket end-to-end. Transitions the ticket through IN PROGRESS → PEER REVIEW, opens a draft PR, and follows karpathy-guidelines throughout.
+description: Pick and implement the next unblocked Jira ticket end-to-end, including optional interactive phased mode with sub-agents for plan PR, feedback, and implementation. Transitions the ticket through IN PROGRESS → PEER REVIEW, opens a draft PR, uses scbd-agent-pr-screenshot for user-facing evidence, and follows karpathy-guidelines throughout.
 ---
 
 # scbd-agent-implement
@@ -103,9 +103,24 @@ No eligible ticket found.
    [optional body referencing ticket key]
 ```
    Preferred types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`.
+
 10. Before considering implementation done, run the full test suite and confirm all tests pass.
     - If tests fail, fix them before proceeding — do not move to Phase 4 with a red test suite.
     - If the feature requires new tests, write them as part of the implementation (not as an afterthought).
+
+### Interactive Phase 3 Option
+
+When the user asks to work interactively, phase implementation, or use sub-agents for each part, split Phase 3 and stop for instructions after each part:
+
+- **Phase 3.1 — Branch + Plan PR**: create/switch to the feature branch, inspect enough code to write a concrete implementation plan, save the plan in the project, commit it, push, and open/update a draft PR that links the plan. Add a comment to the Jira ticket that includes a link to the PR. Do not implement feature code.
+- **Phase 3.2 — Plan Feedback**: address user or reviewer feedback on the plan. Update the plan/PR, commit and push if files changed. Do not start implementation until the user approves moving on.
+- **Phase 3.3 — Implementation**: implement the approved plan, delete the plan, commit logical changes, run verification, update the draft PR body and screenshots, then report back. Do not transition Jira or mark the PR ready until the user confirms.
+
+For each interactive part:
+
+- Spawn a fresh sub-agent only when the user explicitly asks for sub-agents. Give it one bounded part, explicit stop conditions, and the expected final report fields.
+- Keep the main context as coordinator: verify branch state, review the sub-agent handoff, summarize results to the user, and wait for the next instruction.
+- Do not let a sub-agent proceed into the next sub-phase without explicit user approval.
 
 ---
 
@@ -131,8 +146,11 @@ No eligible ticket found.
     )" \
       --base main
 ```
-12. Transition the Jira ticket status to **`PEER REVIEW`**
-13. Remove the label `ready-for-agent` and add label `ready-for-human`
+12. Transition the Jira ticket status to **`PEER REVIEW`** and add a comment linking to the PR
+13. If there were user-facing impacts, add a PR section named `## User-Facing Changes`.
+    - Use the `/scbd-agent-pr-screenshot` skill to capture, crop, verify, host, and link screenshots when the project supports them.
+    - If the project does not have a practical screenshot path, use `/scbd-agent-pr-screenshot` for the prose fallback and testing note.
+14. Remove the label `ready-for-agent` and add label `ready-for-human`
 
 ---
 
