@@ -13,12 +13,13 @@ Each skill follows this contract:
 
 ## Available skills
 
-| Skill                  | Description                                                  | Dependencies          |
-| ---------------------- | ------------------------------------------------------------ | --------------------- |
-| `scbd-agent-implement` | Pick and implement the next unblocked Jira ticket end-to-end | `karpathy-guidelines` |
-| `scbd-agent-review`    | Address peer-review comments on in-progress PRs              | `karpathy-guidelines` |
+| Skill                      | Description                                                  | Dependencies          |
+| -------------------------- | ------------------------------------------------------------ | --------------------- |
+| `scbd-agent-implement`     | Pick and implement the next unblocked Jira ticket end-to-end | `karpathy-guidelines` |
+| `scbd-agent-review`        | Address peer-review comments on in-progress PRs              | `karpathy-guidelines` |
+| `scbd-agent-pr-screenshot` | Capture and link PR screenshots or visual-proof fallback     | —                     |
 
-Both skills accept `<epic> [component] [label]` arguments and read a project-level `scbd_component:` default from the target project's `AGENTS.md` when no component argument is passed.
+The implement and review skills accept `<epic> [component] [label]` arguments and read a project-level `scbd_component:` default from the target project's `AGENTS.md` when no component argument is passed.
 
 ## Invoking skills
 

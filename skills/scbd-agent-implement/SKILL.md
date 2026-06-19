@@ -133,7 +133,7 @@ For each interactive part:
       --title "<ticket-key>: <ticket summary>" \
       --body "$(cat <<'EOF'
     ## Summary
-    Closes (<ticket-key>)[<url-to-the-ticket>]
+    Closes [<ticket-key>](<url-to-the-ticket>)
 
     <!-- describe what was done -->
 

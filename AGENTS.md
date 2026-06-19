@@ -1,6 +1,6 @@
 # AGENTS.md
 
-This file provides guidance to AI Conding Agent when working with code in this repository.
+This file provides guidance to AI Coding Agent when working with code in this repository.
 
 ## Purpose
 
@@ -21,12 +21,13 @@ The `name` must match the directory name. The `description` is what the harness 
 
 ## Available skills
 
-| Skill                  | Description                                                  | Dependencies          |
-| ---------------------- | ------------------------------------------------------------ | --------------------- |
-| `scbd-agent-implement` | Pick and implement the next unblocked Jira ticket end-to-end | `karpathy-guidelines` |
-| `scbd-agent-review`    | Address peer-review comments on in-progress PRs              | `karpathy-guidelines` |
+| Skill                      | Description                                                  | Dependencies          |
+| -------------------------- | ------------------------------------------------------------ | --------------------- |
+| `scbd-agent-implement`     | Pick and implement the next unblocked Jira ticket end-to-end | `karpathy-guidelines` |
+| `scbd-agent-review`        | Address peer-review comments on in-progress PRs              | `karpathy-guidelines` |
+| `scbd-agent-pr-screenshot` | Capture and link PR screenshots or visual-proof fallback     | —                     |
 
-Both skills accept `<epic> [component] [label]` arguments. They read `scbd_component:` from the **target project's** `AGENTS.md` as a default component filter when none is passed.
+The implement and review skills accept `<epic> [component] [label]` arguments. They read `scbd_component:` from the **target project's** `AGENTS.md` as a default component filter when none is passed.
 
 ## Installing dependencies
 
