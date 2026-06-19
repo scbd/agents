@@ -11,14 +11,11 @@ Plan one ticket and leave the plan file uncommitted for the caller.
 
 ## Inputs
 
-When delegated, use the work order's ticket identity, task brief, acceptance criteria, constraints,
-current lifecycle state, target plan path, and stop conditions. Read external context when it is
-needed to resolve or verify the work order, but do not mutate it.
-
-When invoked directly, require `ticket=<key>`. Read the Jira ticket, including its description,
-acceptance criteria, status, dependencies, and relevant comments. Inspect read-only git history and
-workspace state plus any linked GitHub PRs when they clarify prior work or constraints. Ask the human
-only for essential context that these sources cannot resolve.
+Resolve one work order. Require a ticket key from `ticket=<key>` or a supplied work order, and treat
+supplied ticket context, task brief, acceptance criteria, constraints, lifecycle state, target plan
+path, and stop conditions as authoritative. Fill missing facts from the Jira ticket, local project,
+read-only git history and workspace state, and linked GitHub PRs when relevant. Ask the human only for
+essential context those sources cannot resolve.
 
 Use the supplied `plan=<path>`. Otherwise use the target project's `scbd_plan_dir` setting from
 `AGENTS.md`, falling back to `docs/plans/<ticket-key>.md`.

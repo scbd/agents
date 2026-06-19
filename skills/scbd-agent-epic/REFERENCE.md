@@ -75,8 +75,8 @@ Required handoff: outcome, summary, plan used, files, decisions, verification, u
 proposed external replies, blockers, next action
 ```
 
-For standalone compatibility, workers may ask their human caller for missing context. When dispatched
-by this skill, provide a complete work order instead.
+Workers resolve supplied fields into one work order and discover missing context within their
+read-only constraints. When dispatching, provide a complete work order so discovery is unnecessary.
 
 ## Review Worker Output
 

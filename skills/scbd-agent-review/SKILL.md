@@ -11,14 +11,12 @@ Address one ticket's review feedback and leave any changes uncommitted for the c
 
 ## Inputs
 
-When delegated, use the work order's ticket, task brief, relevant plan or current approach, exact
-review comments, acceptance criteria, constraints, and stop conditions. Read external context when
-needed to resolve or verify the work order, but do not mutate it.
-
-When invoked directly, require `ticket=<key>`. Read the Jira ticket, identify its linked PR through
-read-only GitHub and git inspection, and collect the current unresolved review comments. Inspect the
-PR diff, local workspace, checks, and relevant discussion before acting. Ask the human only when the
-ticket-to-PR mapping is ambiguous or essential context cannot be discovered.
+Resolve one work order. Require a ticket key from `ticket=<key>` or a supplied work order, and treat
+supplied ticket context, task brief, plan or current approach, review comments, acceptance criteria,
+constraints, and stop conditions as authoritative. Fill missing facts from the Jira ticket, local
+project, and read-only git and GitHub context. When review comments are not supplied, identify the
+linked PR and collect its unresolved comments. Ask the human only when the ticket-to-PR mapping is
+ambiguous or essential context cannot be discovered.
 
 ## Workflow
 
