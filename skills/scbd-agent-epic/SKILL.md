@@ -51,11 +51,13 @@ reference identifies a human-intervention condition.
 
 ## Ownership
 
-- This skill alone may access Jira, run git commands, or interact with GitHub and PRs.
+- This skill alone owns Jira, git, and GitHub mutations. Focused agents may inspect those systems
+  read-only when needed for their assigned ticket.
 - Dispatch one primary fresh focused sub-agent with `scbd-agent-plan`, `scbd-agent-implement`, or
   `scbd-agent-review` when the selected action needs local work. A correction retry and an auxiliary
   `scbd-agent-pr-screenshot` capture remain part of that same lifecycle action, not new iterations.
-- Focused agents edit local files and run local verification, but never use git or external services.
+- Focused agents edit local files, run local verification, and may read Jira, git, and GitHub, but
+  never mutate those systems.
 - Review focused-agent output before publishing it. Redispatch one fresh correction agent if needed;
   if the corrected result is still unsatisfactory, preserve state and hand over to the human.
 - Follow `/karpathy-guidelines` when reviewing plans and code.

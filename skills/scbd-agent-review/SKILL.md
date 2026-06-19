@@ -1,25 +1,30 @@
 ---
 name: scbd-agent-review
-description: Resolves one coherent set of supplied review comments using only the local filesystem, returning code changes or proposed replies without using git or external services. Use when scbd-agent-epic delegates PR feedback or when a human wants review feedback handled locally.
+description: Resolves one coherent review cycle for a Jira ticket using read-only Jira, git, and GitHub context, returning uncommitted changes and proposed replies. Use when scbd-agent-epic delegates PR feedback or a human directly requests review work for one ticket.
 ---
 
 # scbd-agent-review
 
-Address supplied review feedback and leave any changes uncommitted for the caller.
+Address one ticket's review feedback and leave any changes uncommitted for the caller.
 
-**Usage:** `/scbd-agent-review`
+**Usage:** `/scbd-agent-review ticket=<key>`
 
 ## Inputs
 
-When delegated, require a work order containing the ticket, task brief, relevant plan or current
-approach, exact review comments, acceptance criteria, constraints, and stop conditions.
+When delegated, use the work order's ticket, task brief, relevant plan or current approach, exact
+review comments, acceptance criteria, constraints, and stop conditions. Read external context when
+needed to resolve or verify the work order, but do not mutate it.
 
-When invoked directly, derive those fields from the user's prompt and local files. Ask the human
-for missing review text or other essential context. Do not fetch it from Jira, GitHub, or git.
+When invoked directly, require `ticket=<key>`. Read the Jira ticket, identify its linked PR through
+read-only GitHub and git inspection, and collect the current unresolved review comments. Inspect the
+PR diff, local workspace, checks, and relevant discussion before acting. Ask the human only when the
+ticket-to-PR mapping is ambiguous or essential context cannot be discovered.
 
 ## Workflow
 
-1. Read the supplied comments and inspect the relevant local files.
+1. Read the supplied or discovered comments and inspect the ticket, PR, diff, and relevant local files.
+   If the current workspace is not safely associated with the ticket, stop rather than switching
+   branches or changing git state.
 2. Classify each comment as a code change, sufficient clarification, or inappropriate/infeasible
    request. Do not implement a change merely because a reviewer asked a question.
 3. For appropriate changes, follow `/karpathy-guidelines`, edit the local files, and add or update
@@ -33,8 +38,9 @@ for missing review text or other essential context. Do not fetch it from Jira, G
 
 ## Boundaries
 
-- Do not run any git command, including read-only commands.
-- Do not access Jira or GitHub and do not use their CLIs or APIs.
+- Jira, git, and GitHub access is read-only. Do not transition, assign, label, or comment on Jira;
+  mutate git state or the worktree through git; or create, edit, review, comment on, or merge a PR.
+- Do not fetch, pull, switch branches, stage, commit, push, stash, reset, or clean.
 - Do not capture or prepare PR evidence. Report user-facing impact to the caller.
 - Handle exactly one coherent review cycle per invocation.
 

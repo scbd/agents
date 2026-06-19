@@ -24,12 +24,12 @@ The `name` must match the directory name. The `description` is what the harness 
 | Skill                      | Description                                                    | Dependencies          |
 | -------------------------- | -------------------------------------------------------------- | --------------------- |
 | `scbd-agent-epic`          | Orchestrate one Jira epic iteration and all external state     | `karpathy-guidelines` |
-| `scbd-agent-plan`          | Create one local implementation plan                           | —                     |
-| `scbd-agent-implement`     | Implement one approved plan locally                            | `karpathy-guidelines` |
-| `scbd-agent-review`        | Address one supplied review cycle locally                      | `karpathy-guidelines` |
+| `scbd-agent-plan`          | Plan one Jira ticket with read-only external context           | —                     |
+| `scbd-agent-implement`     | Implement one Jira ticket locally, with or without a plan      | `karpathy-guidelines` |
+| `scbd-agent-review`        | Address one Jira ticket's review cycle locally                 | `karpathy-guidelines` |
 | `scbd-agent-pr-screenshot` | Capture and verify local screenshot evidence                   | —                     |
 
-Only `scbd-agent-epic` interacts with Jira, git, or GitHub. It accepts `epic=`, `component=`, `label=`, and `mode=` arguments. It reads `scbd_component:` and optional `scbd_plan_dir:` defaults from the **target project's** `AGENTS.md`.
+The focused plan, implementation, and review skills may read Jira, git, and GitHub, but only `scbd-agent-epic` may mutate them. The epic skill accepts `epic=`, `component=`, `label=`, and `mode=` arguments. It reads `scbd_component:` and optional `scbd_plan_dir:` defaults from the **target project's** `AGENTS.md`.
 
 ## Installing dependencies
 
@@ -48,8 +48,9 @@ npx skills update -g
 /scbd-agent-epic epic=DEV-20 component=Gaia/KM mode=afk
 
 /scbd-agent-plan ticket=DEV-123 plan=docs/plans/DEV-123.md
-/scbd-agent-implement plan=docs/plans/DEV-123.md
-/scbd-agent-review
+/scbd-agent-implement ticket=DEV-123                            # discover a plan first; implement directly if none exists
+/scbd-agent-implement ticket=DEV-123 plan=docs/plans/DEV-123.md
+/scbd-agent-review ticket=DEV-123
 ```
 
 ## Key conventions enforced by the skills
@@ -59,7 +60,7 @@ npx skills update -g
 - **Review loop:** Every addressed PR comment must include `#done` in the reply to prevent re-processing on the next agent run
 - **Iteration boundary:** Every epic invocation performs exactly one iteration; an external caller owns repetition
 - **Mode behavior:** Interactive pauses at phase boundaries; AFK completes the same iteration without routine pauses
-- **External ownership:** Only the epic skill may access Jira, git, GitHub, commits, pushes, PRs, or evidence hosting
+- **External ownership:** Focused skills have read-only Jira, git, and GitHub access; only the epic skill may mutate them or host evidence
 - **PR state:** Create plan PRs as drafts, mark them ready after implementation, and never push to `main`
 - **Jira sync:** Ticket status transitions (`IN PROGRESS` → `PEER REVIEW` → `Completed`) must stay in sync with PR state at every phase boundary
 

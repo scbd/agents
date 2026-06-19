@@ -74,9 +74,9 @@ Review comments: <exact text and stable identifiers, when applicable>
 Constraints: <project and ticket constraints>
 Expected artifacts: <paths or none>
 Verification: <required checks>
-Allowed operations: local filesystem edits and local test commands only; no git/Jira/GitHub
+Allowed operations: local filesystem edits, local test commands, and read-only Jira/git/GitHub inspection; no Jira, git, or GitHub mutations
 Stop conditions: <explicit boundaries>
-Required handoff: outcome, summary, files, decisions, verification, user-facing impact,
+Required handoff: outcome, summary, plan used, files, decisions, verification, user-facing impact,
 proposed external replies, blockers, next action
 ```
 
@@ -118,10 +118,11 @@ Append a technical iteration log to the PR. Keep Jira in `PEER REVIEW`.
 
 ### Implement
 
-Require the worker to remove the temporary plan. Commit the complete accepted implementation in
-logical Conventional Commits, push, update the draft PR summary and testing sections, publish any
-evidence, and append a technical iteration log. Mark the PR ready for review, transition Jira to
-`PEER REVIEW`, remove `ready-for-agent`, add `ready-for-human`, and add a Jira milestone linking the PR.
+After accepting the worker's output, remove the temporary plan created by the plan phase. Then commit
+the complete accepted implementation in logical Conventional Commits, push, update the draft PR
+summary and testing sections, publish any evidence, and append a technical iteration log. Mark the PR
+ready for review, transition Jira to `PEER REVIEW`, remove `ready-for-agent`, add `ready-for-human`,
+and add a Jira milestone linking the PR.
 
 ### Plan
 
