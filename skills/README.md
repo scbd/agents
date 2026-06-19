@@ -1,35 +1,39 @@
 # Skills catalog
 
-## Design philosophy — the Ralph Wiggum loop
+## Design philosophy — externally driven iterations
 
-These skills are built with the **Ralph Wiggum loop** concept in mind (from Andrej Karpathy's work on agentic systems): an agent runs once inside a clean context window, does exactly one unit of work, then exits. The loop is external — a scheduler or human invokes the skill again for the next unit of work.
+`scbd-agent-epic` performs exactly one unit of epic work and exits. A scheduler or human may invoke it again, but repetition is deliberately outside the skill. This keeps each run recoverable whether one context lives for a ticket lifecycle or only one iteration.
 
-> **Note:** the Ralph Wiggum loop itself is not implemented here. These skills are designed to be called *from* a Ralph loop — they are the payload, not the loop. Each skill assumes it starts with a clean context and exits when its single task is done.
+Interactive and AFK modes have the same one-iteration boundary. Interactive mode pauses for instructions at each phase boundary; AFK mode crosses those boundaries without routine confirmation.
 
 Each skill follows this contract:
-- Stateless — no memory of previous runs
-- One ticket, one review cycle, one PR per run
-- Clean exit so the caller can reset context and run again
+- Durable state lives in Jira, git history, PRs, and committed plan artifacts
+- One plan, implementation, review cycle, recovery, or close-out per run
+- Clean handoff so the caller can inspect state or invoke the epic skill again
+- Only the epic skill interacts with Jira, git, or GitHub
 
 ## Available skills
 
-| Skill                      | Description                                                  | Dependencies          |
-| -------------------------- | ------------------------------------------------------------ | --------------------- |
-| `scbd-agent-implement`     | Pick and implement the next unblocked Jira ticket end-to-end | `karpathy-guidelines` |
-| `scbd-agent-review`        | Address peer-review comments on in-progress PRs              | `karpathy-guidelines` |
-| `scbd-agent-pr-screenshot` | Capture and link PR screenshots or visual-proof fallback     | —                     |
+| Skill                      | Description                                                    | Dependencies          |
+| -------------------------- | -------------------------------------------------------------- | --------------------- |
+| `scbd-agent-epic`          | Orchestrate one Jira epic iteration and all external state     | `karpathy-guidelines` |
+| `scbd-agent-plan`          | Create one local implementation plan                           | —                     |
+| `scbd-agent-implement`     | Implement one approved plan locally                            | `karpathy-guidelines` |
+| `scbd-agent-review`        | Address one supplied review cycle locally                      | `karpathy-guidelines` |
+| `scbd-agent-pr-screenshot` | Capture and verify local screenshot evidence                   | —                     |
 
-The implement and review skills accept `<epic> [component] [label]` arguments and read a project-level `scbd_component:` default from the target project's `AGENTS.md` when no component argument is passed.
+The epic skill dispatches the focused skills with a structured work order, reviews their local output, and handles all external bookkeeping. Each focused skill can also be invoked directly and hands uncommitted local work back to the human.
 
 ## Invoking skills
 
 ```bash
-/scbd-agent-implement DEV-20                        # component from AGENTS.md
-/scbd-agent-implement DEV-20 Gaia/KM
-/scbd-agent-implement DEV-20 Gaia/KM my-label
+/scbd-agent-epic epic=DEV-20 mode=interactive       # component from AGENTS.md
+/scbd-agent-epic epic=DEV-20 component=Gaia/KM mode=afk
 
-/scbd-agent-review DEV-20
-/scbd-agent-review DEV-20 Gaia/KM
+/scbd-agent-plan ticket=DEV-123 plan=docs/plans/DEV-123.md
+/scbd-agent-implement plan=docs/plans/DEV-123.md
+/scbd-agent-review
+/scbd-agent-pr-screenshot output=/tmp/DEV-123-evidence
 ```
 
 ## Setting up a new project
@@ -38,15 +42,18 @@ Add this line to the project's `AGENTS.md` so the skills can pick up a default c
 
 ```
 scbd_component: Your/Component
+scbd_plan_dir: docs/plans
 ```
+
+`scbd_plan_dir` is optional and defaults to `docs/plans`.
 
 ## External dependencies
 
 Install these once, globally:
 
-| Skill                 | Source                                | Required by                                   |
-| --------------------- | ------------------------------------- | --------------------------------------------- |
-| `karpathy-guidelines` | `multica-ai/andrej-karpathy-skills`   | `scbd-agent-implement`, `scbd-agent-review`   |
+| Skill                 | Source                              | Required by                                                         |
+| --------------------- | ----------------------------------- | ------------------------------------------------------------------- |
+| `karpathy-guidelines` | `multica-ai/andrej-karpathy-skills` | `scbd-agent-epic`, `scbd-agent-implement`, `scbd-agent-review`      |
 
 ```bash
 npx skills add multica-ai/andrej-karpathy-skills --skill karpathy-guidelines -g

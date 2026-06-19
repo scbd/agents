@@ -21,18 +21,20 @@ The `name` must match the directory name. The `description` is what the harness 
 
 ## Available skills
 
-| Skill                      | Description                                                  | Dependencies          |
-| -------------------------- | ------------------------------------------------------------ | --------------------- |
-| `scbd-agent-implement`     | Pick and implement the next unblocked Jira ticket end-to-end | `karpathy-guidelines` |
-| `scbd-agent-review`        | Address peer-review comments on in-progress PRs              | `karpathy-guidelines` |
-| `scbd-agent-pr-screenshot` | Capture and link PR screenshots or visual-proof fallback     | —                     |
+| Skill                      | Description                                                    | Dependencies          |
+| -------------------------- | -------------------------------------------------------------- | --------------------- |
+| `scbd-agent-epic`          | Orchestrate one Jira epic iteration and all external state     | `karpathy-guidelines` |
+| `scbd-agent-plan`          | Create one local implementation plan                           | —                     |
+| `scbd-agent-implement`     | Implement one approved plan locally                            | `karpathy-guidelines` |
+| `scbd-agent-review`        | Address one supplied review cycle locally                      | `karpathy-guidelines` |
+| `scbd-agent-pr-screenshot` | Capture and verify local screenshot evidence                   | —                     |
 
-The implement and review skills accept `<epic> [component] [label]` arguments. They read `scbd_component:` from the **target project's** `AGENTS.md` as a default component filter when none is passed.
+Only `scbd-agent-epic` interacts with Jira, git, or GitHub. It accepts `epic=`, `component=`, `label=`, and `mode=` arguments. It reads `scbd_component:` and optional `scbd_plan_dir:` defaults from the **target project's** `AGENTS.md`.
 
 ## Installing dependencies
 
 ```bash
-# External skill required by both scbd-agent-* skills
+# External skill used by the epic, implementation, and review skills
 npx skills add multica-ai/andrej-karpathy-skills --skill karpathy-guidelines -g
 
 # Update all installed skills
@@ -42,9 +44,12 @@ npx skills update -g
 ## Invoking skills
 
 ```bash
-/scbd-agent-implement DEV-20               # uses scbd_component from AGENTS.md
-/scbd-agent-implement DEV-20 Gaia/KM
-/scbd-agent-review DEV-20 Gaia/KM my-label
+/scbd-agent-epic epic=DEV-20 mode=interactive
+/scbd-agent-epic epic=DEV-20 component=Gaia/KM mode=afk
+
+/scbd-agent-plan ticket=DEV-123 plan=docs/plans/DEV-123.md
+/scbd-agent-implement plan=docs/plans/DEV-123.md
+/scbd-agent-review
 ```
 
 ## Key conventions enforced by the skills
@@ -52,7 +57,10 @@ npx skills update -g
 - **Branch naming:** `feature/<ticket-key>-<short-slug>`
 - **Commits:** Conventional Commits — `feat`, `fix`, `refactor`, `test`, `docs`, `chore`
 - **Review loop:** Every addressed PR comment must include `#done` in the reply to prevent re-processing on the next agent run
-- **PR state:** Always draft on creation; never push to `main`
+- **Iteration boundary:** Every epic invocation performs exactly one iteration; an external caller owns repetition
+- **Mode behavior:** Interactive pauses at phase boundaries; AFK completes the same iteration without routine pauses
+- **External ownership:** Only the epic skill may access Jira, git, GitHub, commits, pushes, PRs, or evidence hosting
+- **PR state:** Create plan PRs as drafts, mark them ready after implementation, and never push to `main`
 - **Jira sync:** Ticket status transitions (`IN PROGRESS` → `PEER REVIEW` → `Completed`) must stay in sync with PR state at every phase boundary
 
 ## Setting up a new project to use these skills
@@ -61,6 +69,7 @@ Add this line to the target project's `AGENTS.md`:
 
 ```
 scbd_component: Your/Component
+scbd_plan_dir: docs/plans
 ```
 
 ## Adding a new skill
