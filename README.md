@@ -30,9 +30,8 @@ npx skills update -g
 
 ## Skills catalog
 
-See [skills/README.md](skills/README.md) for the full list of available skills, invocation examples, and instructions for adding new ones.
-
-The `scbd-agent-epic` skill orchestrates one Jira epic iteration and owns Jira, git, GitHub, and PR evidence. Its focused plan, implementation, review, and screenshot skills work only with local files and return uncommitted handoffs.
+See [skills/README.md](skills/README.md) for the full catalog, invocation examples, workflow
+conventions, and target-project setup.
 
 ## Recommended third-party skills
 

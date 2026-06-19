@@ -48,6 +48,17 @@ scbd_plan_dir: docs/plans
 
 `scbd_plan_dir` is optional and defaults to `docs/plans`.
 
+## Workflow conventions
+
+- **Branch naming:** `feature/<ticket-key>-<short-slug>`
+- **Commits:** Conventional Commits — `feat`, `fix`, `refactor`, `test`, `docs`, `chore`
+- **Review loop:** Every addressed PR comment includes `#done` in its reply to prevent re-processing
+- **Iteration boundary:** Every epic invocation performs exactly one iteration; an external caller owns repetition
+- **Mode behavior:** Interactive pauses at phase boundaries; AFK completes the same iteration without routine pauses
+- **External ownership:** Focused skills have read-only Jira, git, and GitHub access; only the epic skill mutates them or hosts evidence
+- **PR state:** Plan PRs start as drafts, become ready after implementation, and never target changes directly to `main`
+- **Jira sync:** Ticket status (`IN PROGRESS` → `PEER REVIEW` → `Completed`) stays synchronized with PR state
+
 ## External dependencies
 
 Install these once, globally:
@@ -59,15 +70,3 @@ Install these once, globally:
 ```bash
 npx skills add multica-ai/andrej-karpathy-skills --skill karpathy-guidelines -g
 ```
-
-## Adding a new skill
-
-1. Create `skills/<name>/SKILL.md` with YAML frontmatter:
-   ```yaml
-   ---
-   name: <name>
-   description: One-sentence description of what the skill does and when to use it.
-   ---
-   ```
-2. Add a row to the skills table above.
-3. List any external dependencies in the Dependencies table above.
