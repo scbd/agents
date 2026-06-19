@@ -26,15 +26,9 @@ Accept positional arguments for backward compatibility, but prefer key-value arg
 
 ## One-iteration Contract
 
-One invocation selects and completes no more than one of these actions:
-
-1. Recover interrupted local work.
-2. Close out one merged PR.
-3. Address one coherent review cycle, including plan feedback.
-4. Implement one approved plan.
-5. Plan one new unblocked ticket.
-
-Never loop to another action or ticket. Repeated invocation belongs to a human or external process.
+One invocation resumes interrupted work or completes one action from the lifecycle matrix in the
+reference. Never loop to another action or ticket. Repeated invocation belongs to a human or
+external process.
 
 ## Modes
 

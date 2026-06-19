@@ -21,20 +21,29 @@ Do not discard, overwrite, stash, or rewrite unexplained local work. Treat relev
 the first candidate for recovery. If it cannot be confidently associated with one epic ticket, stop
 for human intervention.
 
-Choose exactly one action using this precedence:
+Recover first when relevant uncommitted work or an interrupted phase can be safely identified. Keep
+the existing branch and files intact, reconstruct the interrupted action and phase from Jira, PR,
+plan, and local state, then resume that action using its matrix row. Recovery is not a separate
+lifecycle outcome. Describe the recovery in the technical iteration log when publishing.
 
-1. **Recover:** Relevant uncommitted work or an interrupted phase can be safely identified.
-2. **Close out:** A linked PR is merged but its Jira ticket is not `Completed`.
-3. **Review:** A linked open PR has supplied feedback without an agent reply containing `#done`.
-4. **Implement:** An `IN PROGRESS` ticket has a completed plan and no unresolved plan feedback. In
-   interactive mode, propose implementation and treat the human's instruction to proceed as plan
-   approval. In AFK mode, the epic agent's accepted plan review is approval for the next invocation.
-5. **Plan:** A label-matching `TO DO` ticket is unblocked. Order candidates by Jira priority, then
-   creation date.
+Otherwise choose the first matching row in the lifecycle matrix, from top to bottom.
 
 A dependency blocks a ticket when an `is blocked by` target is not `Done` or `Completed`. A closed,
 unmerged PR, ambiguous ticket/PR mapping, unsafe workspace, or missing required access requires a
 human handoff. Do not select another ticket.
+
+## Lifecycle Matrix
+
+| Action        | Select when                                                                                                                                                                                                                                      | Prepare                                                                                                                                                                              | Worker                                                                      | Publish                                                                                                                                                                                                                                                                                                                                       | End state                                                               |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| **Close out** | A linked PR is merged but its Jira ticket is not `Completed`.                                                                                                                                                                                    | Confirm a clean workspace and the exact merged PR/ticket pair.                                                                                                                       | None.                                                                       | Transition Jira to `Completed`, add a concise completion note linking the merged PR, and perform safe local branch cleanup.                                                                                                                                                                                                                   | Jira `Completed`; iteration ends.                                       |
+| **Review**    | A linked open PR has feedback without an agent reply containing `#done`.                                                                                                                                                                         | Fetch safely, switch to the PR feature branch, and ensure local state matches its remote without overwriting local changes.                                                          | `scbd-agent-review` for one coherent review cycle, including plan feedback. | Commit accepted changes, if any, using a focused Conventional Commit; push once; publish evidence when needed; reply to every supplied comment with the reviewed response containing `#done`; append a technical iteration log to the PR.                                                                                                     | PR remains open; Jira remains `PEER REVIEW`.                            |
+| **Implement** | An `IN PROGRESS` ticket has a completed plan and no unresolved plan feedback. In interactive mode, the human's instruction to proceed approves the plan; in AFK mode, the epic agent's accepted plan review is approval for the next invocation. | Fetch safely, switch to the PR feature branch, and ensure local state matches its remote without overwriting local changes.                                                          | `scbd-agent-implement` with the approved plan.                              | Remove the temporary plan; commit the accepted implementation in logical Conventional Commits; push; update the draft PR summary and testing; publish evidence; append a technical iteration log; mark the PR ready; transition Jira to `PEER REVIEW`; replace `ready-for-agent` with `ready-for-human`; add a Jira milestone linking the PR. | PR ready for review; Jira `PEER REVIEW`.                                |
+| **Plan**      | A label-matching `TO DO` ticket is unblocked. Order candidates by Jira priority, then creation date.                                                                                                                                             | Transition Jira to `IN PROGRESS`, assign it to the current Jira user, create `feature/<ticket-key>-<short-slug>` from an up-to-date `main`, and choose `<plan-dir>/<ticket-key>.md`. | `scbd-agent-plan` for one decision-complete plan.                           | Commit only the plan using `docs(<ticket-key>): add implementation plan`; push; open a draft PR against `main` whose body links Jira and summarizes the plan and state; add a Jira milestone linking the PR; in AFK mode, record that the accepted epic-agent review approved the plan for a later iteration.                                 | Draft PR open; Jira remains `IN PROGRESS`; no feature code implemented. |
+
+Keep Jira and PR state coherent at completed phase boundaries. If preparation fails after a Jira
+mutation, record the failure on Jira before handing over. Never push directly to `main`. Verify every
+Jira, git, and GitHub mutation after performing it.
 
 ## Interactive Boundaries
 
@@ -44,20 +53,6 @@ state after any human intervention before continuing.
 
 The boundaries are assessment, workspace preparation, worker review, and external publication. A
 close-out iteration has no worker, so use assessment and external-publication boundaries only.
-
-## Prepare Workspace
-
-- **Recover:** Keep the existing branch and files intact; reconstruct the phase from Jira, PR, plan,
-  and local state.
-- **Close out:** Confirm a clean workspace and the exact merged PR/ticket pair.
-- **Review/implement:** Fetch safely, switch to the PR feature branch, and ensure local state matches
-  its remote before dispatch. Never overwrite local changes.
-- **Plan:** Transition the ticket to `IN PROGRESS`, assign it to the current Jira user, create
-  `feature/<ticket-key>-<short-slug>` from an up-to-date `main`, and choose
-  `<plan-dir>/<ticket-key>.md`.
-
-Keep Jira and PR state coherent at completed phase boundaries. If preparation fails after a Jira
-mutation, record the failure on Jira before handing over.
 
 ## Dispatch Work
 
@@ -97,41 +92,6 @@ For implementation or review changes with user-facing impact, dispatch
 `scbd-agent-pr-screenshot` with local scenarios and a temporary output directory. Review each image.
 The screenshot worker only captures; this skill hosts accepted artifacts, updates PR prose, and removes
 temporary artifacts after publication. If capture is impractical, publish its prose fallback.
-
-## Publish The Iteration
-
-### Recover
-
-Complete only the reconstructed interrupted phase. Use the applicable publication rules below and
-describe the recovery in the technical log.
-
-### Close Out
-
-Transition Jira to `Completed`, add a concise completion note linking the merged PR, and perform safe
-local branch cleanup. Do not dispatch a worker or begin another ticket.
-
-### Review
-
-Commit accepted changes, if any, using a focused Conventional Commit; push once; publish evidence when
-needed; and reply to every supplied comment with the worker's reviewed response containing `#done`.
-Append a technical iteration log to the PR. Keep Jira in `PEER REVIEW`.
-
-### Implement
-
-After accepting the worker's output, remove the temporary plan created by the plan phase. Then commit
-the complete accepted implementation in logical Conventional Commits, push, update the draft PR
-summary and testing sections, publish any evidence, and append a technical iteration log. Mark the PR
-ready for review, transition Jira to `PEER REVIEW`, remove `ready-for-agent`, add `ready-for-human`,
-and add a Jira milestone linking the PR.
-
-### Plan
-
-Commit only the decision-complete plan using `docs(<ticket-key>): add implementation plan`, push, and
-open a draft PR against `main`. The PR body must link Jira and summarize the plan and current state.
-Add a Jira milestone linking the draft PR. In AFK mode, record that the accepted epic-agent review
-approved the plan for a later iteration. Keep Jira `IN PROGRESS`; do not implement feature code.
-
-Never push directly to `main`. Verify every Jira, git, and GitHub mutation after performing it.
 
 ## Durable Logs
 
