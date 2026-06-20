@@ -1,62 +1,54 @@
 ---
 name: scbd-agent-epic
-description: Orchestrates exactly one unit of work from a Jira epic, owning Jira, git, GitHub, workspace preparation, sub-agent dispatch, verification, PR evidence, and handoff. Use when performing interactive step-by-step epic work or one unattended AFK iteration that an external process may invoke repeatedly.
+description: Runs one Jira epic iteration, including workspace, agents, verification, external state, evidence, and handoff. Use for interactive or unattended epic work.
 ---
 
 # scbd-agent-epic
 
-Assess an epic and complete exactly one iteration of its highest-priority actionable work.
+Complete one iteration of an epic's highest-priority actionable work.
 
 **Usage:** `/scbd-agent-epic epic=<key> [component=<name>] [label=<label>] [mode=interactive|afk]`
 
-Read [REFERENCE.md](REFERENCE.md) before operating. It defines the lifecycle state machine,
-work-order contract, external logging, recovery rules, and handoff format.
+Read [REFERENCE.md](REFERENCE.md) before operating.
 
 ## Arguments
 
-| Parameter | Default | Requirement |
-|-----------|---------|-------------|
-| `epic` | none | Required Jira epic key |
-| `component` | target project's `scbd_component` | Required after fallback |
-| `label` | `ready-for-agent` | Intake filter for new `TO DO` tickets only |
-| `mode` | `interactive` | `interactive` or `afk` |
+| Parameter   | Default                    | Requirement                                |
+| ----------- | -------------------------- | ------------------------------------------ |
+| `epic`      | none                       | Required Jira epic key                     |
+| `component` | project's `scbd_component` | Required after fallback                    |
+| `label`     | `ready-for-agent`          | Intake filter for new `TO DO` tickets only |
+| `mode`      | `interactive`              | `interactive` or `afk`                     |
 
-Accept positional arguments for backward compatibility, but prefer key-value arguments. Read
-`scbd_plan_dir` from the target project's `AGENTS.md`, defaulting to `docs/plans`.
+Accept legacy positional arguments; prefer key-value arguments. Read `scbd_plan_dir` from the
+project's `AGENTS.md`; default to `docs/plans`.
 
 ## One-iteration Contract
 
-One invocation resumes interrupted work or completes one action from the lifecycle matrix in the
-reference. Never loop to another action or ticket. Repeated invocation belongs to a human or
-external process.
+Resume interrupted work or complete one lifecycle action. Never continue to another action or ticket.
 
 ## Modes
 
-In `interactive` mode, present findings and wait for instructions:
+In `interactive` mode, pause:
 
 1. After selecting the proposed action.
 2. After preparing or recovering the workspace.
 3. After reviewing the focused worker's handoff and local output.
-4. Before commits, pushes, Jira transitions, PR replies, evidence publication, or other external
-   mutations.
+4. Before any external mutation.
 
-In `afk` mode, cross those boundaries without routine confirmation. Stop in either mode when the
-reference identifies a human-intervention condition.
+In `afk` mode, cross these boundaries without routine confirmation. Always obey reference stop
+conditions.
 
 ## Ownership
 
-- This skill alone owns Jira, git, and GitHub mutations. Focused agents may inspect those systems
-  read-only when needed for their assigned ticket.
-- Dispatch one primary fresh focused sub-agent with `scbd-agent-plan`, `scbd-agent-implement`, or
-  `scbd-agent-review` when the selected action needs local work. A correction retry and an auxiliary
-  `scbd-agent-pr-screenshot` capture remain part of that same lifecycle action, not new iterations.
-- Focused agents edit local files, run local verification, and may read Jira, git, and GitHub, but
-  never mutate those systems.
-- Review focused-agent output before publishing it. Redispatch one fresh correction agent if needed;
-  if the corrected result is still unsatisfactory, preserve state and hand over to the human.
+- Only this skill mutates Jira, git, or GitHub. Focused agents may edit files, test, and inspect those
+  systems read-only.
+- For local work, dispatch one fresh `scbd-agent-plan`, `scbd-agent-implement`, or
+  `scbd-agent-review` agent. One correction retry and optional `scbd-agent-pr-screenshot` capture
+  belong to the same iteration.
+- Review output before publishing. After one failed correction, preserve state and stop for a human.
 - Follow `/karpathy-guidelines` when reviewing plans and code.
 
 ## Completion
 
-Run final verification, perform the selected action's Jira/git/GitHub bookkeeping, and print the
-structured handoff from the reference. Then stop, even when more epic work is available.
+Verify, publish the selected action, print the reference handoff, and stop.

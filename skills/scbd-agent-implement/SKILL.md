@@ -1,53 +1,39 @@
 ---
 name: scbd-agent-implement
-description: Implements a Jira ticket from a supplied or discovered plan, or directly from ticket context when no plan exists, using read-only Jira, git, and GitHub access and leaving local changes uncommitted. Use when scbd-agent-epic delegates implementation or a human directly requests implementation of one ticket.
+description: Implements one Jira ticket, with or without a plan, leaving changes uncommitted and external systems untouched. Use for delegated or direct ticket implementation.
 ---
 
 # scbd-agent-implement
 
-Implement one ticket from an explicit plan, a confirmed discovered plan, or ticket context, and leave
-the result uncommitted for the caller.
+Implement one ticket and leave changes uncommitted.
 
 **Usage:** `/scbd-agent-implement ticket=<key> [plan=<path>]`
 
 ## Inputs
 
-Resolve one work order. Require a ticket key from `ticket=<key>` or a supplied work order, and treat
-supplied ticket context, task brief, acceptance criteria, constraints, verification, stop conditions,
-and approved plan as authoritative. Fill missing facts from the Jira ticket, local project, and
-read-only git and GitHub context when relevant. Ask the human only for essential context those sources
-cannot resolve.
+Require `ticket=<key>` or a work order. Supplied context, criteria, constraints, verification, stop
+conditions, and approved plan are authoritative. Resolve gaps from Jira, local files, read-only git,
+and GitHub; ask only for undiscoverable essentials.
 
-The plan may be inline or supplied with `plan=<path>`. Validate and use a supplied plan. Otherwise
-search the local filesystem for a plan matching the ticket key, starting with `scbd_plan_dir` from
-`AGENTS.md` and `docs/plans`. Validate matches against the ticket. If exactly one plan matches,
-summarize it and obtain explicit human confirmation before using it. If several match, ask the human
-to choose. Only when no matching plan exists should the skill derive a decision-complete approach
-from the ticket, project instructions, codebase, and external context. Ask the human when a material
-product or technical decision remains unresolved.
+Validate an inline or supplied plan. Otherwise search `scbd_plan_dir`, then `docs/plans`, for the
+ticket key. Validate matches against Jira. Confirm the sole match; ask the human to choose among
+several. If none exists, derive a decision-complete approach. Ask about unresolved material decisions.
 
 ## Workflow
 
-1. Read the ticket, relevant project instructions, linked PR context, and resolved plan or approach.
-   Inspect the relevant code and tests, and settle any remaining implementation details before editing.
-2. Inspect the current workspace with read-only git commands. If it is not safely associated with
-   the ticket, stop rather than switching branches or changing git state.
+1. Read the ticket, instructions, linked PR, plan or approach, code, and tests.
+2. Inspect the workspace read-only. Stop if it is not safely associated with the ticket.
 3. Follow `/karpathy-guidelines` while making the smallest complete implementation.
 4. Add or update tests required by the change.
-5. Run the most relevant verification available locally. Fix failures caused by the work; report
-   unrelated or unresolved failures clearly.
-6. Stop without removing plan files, preparing screenshots, staging files, committing, or handing
-   work to another phase.
+5. Run relevant local verification. Fix caused failures; report others.
+6. Stop without removing plans, capturing evidence, staging, committing, or starting another phase.
 
 ## Boundaries
 
-- Jira, git, and GitHub access is read-only. Do not transition, assign, label, or comment on Jira;
-  mutate git state or the worktree through git; or create, edit, review, comment on, or merge a PR.
-- Do not fetch, pull, switch branches, stage, commit, push, stash, reset, or clean.
-- Preserve every supplied or discovered plan file. Identify the plan used in the handoff so the epic
-  agent or human can decide whether to remove it.
-- Do not capture, host, or prepare PR evidence. Report user-facing impact so the caller can decide
-  whether to invoke `scbd-agent-pr-screenshot`.
+- Jira, git, and GitHub are read-only. Do not fetch, pull, switch, stage, commit, push, stash, reset,
+  clean, mutate Jira, or mutate PRs.
+- Preserve plans and identify the one used.
+- Do not prepare PR evidence; report user-facing impact.
 - Work on exactly one implementation per invocation.
 
 ## Handoff
