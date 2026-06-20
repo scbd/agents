@@ -1,13 +1,13 @@
 ---
-name: scbd-agent-pr-screenshot
-description: Captures verified local screenshot evidence without git or external services. Use for delegated or direct visual proof and suggested PR prose.
+name: scbd-agent-screenshot
+description: Captures, crops, and verifies local screenshot evidence without git or external services. Use when an epic iteration or human needs publication-ready visual proof and suggested PR prose.
 ---
 
-# scbd-agent-pr-screenshot
+# scbd-agent-screenshot
 
-Create local visual evidence and leave publication to the caller.
+Create publication-ready local visual evidence and leave hosting and PR updates to the caller.
 
-**Usage:** `/scbd-agent-pr-screenshot [output=<directory>]`
+**Usage:** `/scbd-agent-screenshot [output=<directory>]`
 
 ## Inputs
 
@@ -24,7 +24,7 @@ them locally. Ask for missing essentials; never inspect Jira, GitHub, or git.
 4. Crop around the changed surface. Use test-only setup or injected screenshot CSS to fix clipping;
    never change product CSS solely for evidence.
 5. Inspect each image; recapture if blank, clipped, misleading, or stale.
-6. Stop without hosting artifacts or editing a PR.
+6. Return the accepted local artifacts and suggested PR prose without hosting or publishing them.
 
 ## Boundaries
 
@@ -39,6 +39,7 @@ Outcome: captured | prose-only | blocked
 Artifacts: <local paths and dimensions>
 Scenarios: <what each artifact proves>
 Verification: <how each artifact was inspected>
+Publication readiness: <accepted artifacts safe to host, or reason none are available>
 Suggested PR prose: <User-Facing Changes and Testing text>
 Temporary files: <removed paths or none>
 Blockers: <none or details>

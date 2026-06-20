@@ -44,8 +44,9 @@ conditions.
 - Only this skill mutates Jira, git, or GitHub. Focused agents may edit files, test, and inspect those
   systems read-only.
 - For local work, dispatch one fresh `scbd-agent-plan`, `scbd-agent-implement`, or
-  `scbd-agent-review` agent. One correction retry and optional `scbd-agent-pr-screenshot` capture
-  belong to the same iteration.
+  `scbd-agent-review` agent. One correction retry belongs to the same iteration. Apply
+  `scbd-agent-screenshot` in the epic agent's context; never delegate screenshot capture. The
+  epic agent alone hosts accepted artifacts and updates the PR.
 - Review output before publishing. After one failed correction, preserve state and stop for a human.
 - Follow `/karpathy-guidelines` when reviewing plans and code.
 

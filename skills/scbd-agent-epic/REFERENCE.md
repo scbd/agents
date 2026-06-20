@@ -85,9 +85,32 @@ unrelated edits, missing tests, unexplained deletions, red checks, or undecided 
 dispatch one fresh correction agent with the original order and precise findings. After a second
 failure, preserve state, log any safe blocker, and stop.
 
-For user-facing implementation/review changes, dispatch `scbd-agent-pr-screenshot` with scenarios and
-a temporary directory. Inspect images. The epic skill hosts accepted artifacts, updates PR prose, and
-removes temporary files. If capture fails, publish its prose fallback.
+For user-facing implementation/review changes, apply `scbd-agent-screenshot` in this context;
+never dispatch a screenshot agent. Give it deterministic local scenarios and a temporary output
+directory. Review its handoff and inspect every image before publication. If capture is impractical,
+publish its prose fallback.
+
+The epic agent owns publication:
+
+1. Keep screenshots out of the project repository unless it explicitly stores PR assets.
+2. To host on GitHub Gist, wrap each PNG in a text SVG containing an embedded
+   `data:image/png;base64,...`; `gh gist create` rejects binary PNG files.
+3. Create a secret gist with the SVG files. `gh gist create` creates secret gists by default; some
+   versions do not support `--secret`. Use `--public` only when explicitly requested.
+4. Fetch exact raw URLs with
+   `gh api gists/<gist-id> --jq '.files | to_entries[] | [.key, .value.raw_url] | @tsv'`; never infer
+   raw URLs from the gist web URL.
+5. Embed the raw SVG URLs under `## User-Facing Changes`, link the gist, mention capture in
+   `## Testing`, and verify the rendered PR body.
+6. Remove temporary local artifacts after verifying the gist and PR update.
+
+Create an SVG wrapper with the PNG's actual dimensions:
+
+```bash
+node -e "const fs=require('fs'); const [src,out,w,h]=process.argv.slice(1); const b64=fs.readFileSync(src).toString('base64'); fs.writeFileSync(out, '<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"'+w+'\" height=\"'+h+'\" viewBox=\"0 0 '+w+' '+h+'\"><image width=\"'+w+'\" height=\"'+h+'\" href=\"data:image/png;base64,'+b64+'\"/></svg>')" screenshot.png screenshot.svg 1200 800
+```
+
+Use `file screenshot.png` to obtain dimensions when image tooling is unavailable.
 
 ## Logs
 
