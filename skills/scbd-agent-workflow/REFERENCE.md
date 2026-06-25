@@ -19,8 +19,11 @@ Never discard, overwrite, stash, or rewrite unexplained work. Recover relevant d
 work first: preserve branch/files, infer its ticket/action from Jira, PR, plan, and local state, then
 resume that matrix row. Log the recovery. If ownership is ambiguous, stop for a human.
 
-Otherwise select the first matching action below. A closed-unmerged PR, ambiguous mapping, unsafe
-workspace, blocked ticket, or missing access requires handoff; do not choose another ticket.
+Otherwise select the first matching action below. During Plan selection only, skip blocked
+label-matching `TO DO` intake tickets and continue to the next unblocked candidate; record each
+skipped ticket and blocker in the final handoff. A closed-unmerged PR, ambiguous mapping, unsafe
+workspace, blocked active or recovery ticket, or missing access requires handoff; do not choose
+another ticket.
 
 ## Lifecycle (first match wins)
 
@@ -37,7 +40,8 @@ workspace, blocked ticket, or missing access requires handoff; do not choose ano
    plan; create logical Conventional Commits; push; update draft PR summary/testing; publish evidence
    and log; keep draft state; transition Jira to `PEER REVIEW`; replace `ready-for-agent` with
    `ready-for-human`; link the PR milestone. End: draft unchanged; Jira `PEER REVIEW`.
-4. **Plan:** Unblocked, label-matching `TO DO`; order by priority then creation. Transition to
+4. **Plan:** First unblocked, label-matching `TO DO` after skipping blocked intake candidates;
+   order by priority then creation. Transition to
    `IN PROGRESS`; assign the current Jira user; create `feature/<ticket-key>-<short-slug>` from current
    `main`; choose `<plan-dir>/<ticket-key>.md`; run `scbd-agent-plan`. Commit only the plan as
    `docs(<ticket-key>): add implementation plan`; push; open a draft PR to `main` linking Jira and
@@ -100,8 +104,9 @@ Use `scbd-agent-jira` for milestone, state, link, blocker, and decision logs. Us
 ## Stop
 
 Stop without selecting other work for ambiguous ownership/recovery, closed-unmerged PRs, unavailable
-credentials/transitions/branches/state, red verification, failed correction, human judgment, or an
-irreconcilable partial mutation. Log only to a certain destination. Preserve files and branch.
+credentials/transitions/branches/state, blocked active or recovery work, red verification, failed
+correction, human judgment, or an irreconcilable partial mutation. Blocked `TO DO` intake tickets
+encountered during Plan selection are skipped, not stop conditions. Log only to a certain destination. Preserve files and branch.
 
 Always finish with:
 
