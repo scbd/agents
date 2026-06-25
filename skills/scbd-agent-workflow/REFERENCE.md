@@ -30,10 +30,12 @@ another ticket.
 1. **Close out:** Merged PR with Jira not `Completed`. Verify a clean workspace and exact pair.
    Transition Jira to `Completed`, note the PR, and safely clean the local branch. End: Jira
    `Completed`.
-2. **Review:** Open PR feedback lacks an agent `#done` reply. Safely fetch/switch to its feature
-   branch and match the remote without overwriting work. Run `scbd-agent-review` for one cycle.
-   Commit accepted changes if any, push once, publish needed evidence, reply to every comment with
-   `#done`, and log. End: PR open; Jira `PEER REVIEW`.
+2. **Review:** Open PR feedback addressed to the agent lacks an agent `#done` reply. Safely
+   fetch/switch to its feature branch and match the remote without overwriting work. Run
+   `scbd-agent-review` for one cycle. Commit accepted changes if any, push once, publish needed
+   evidence, reply `#done` only to actioned agent-addressed comments, and log. Preserve
+   human-addressed comments as open human threads unless explicitly delegated. End: PR open; Jira
+   `PEER REVIEW`.
 3. **Implement:** Jira `IN PROGRESS`; plan completed; no unresolved plan feedback; human approval in
    interactive mode or accepted workflow review in AFK. Safely fetch/switch to the feature branch and
    match its remote without overwriting work. Run `scbd-agent-implement` with the plan. Remove the
