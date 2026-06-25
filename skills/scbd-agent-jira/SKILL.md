@@ -43,6 +43,13 @@ linked PRs, recent Jira comments, and the matching local/PR state supplied by th
 Use Jira for milestones, state changes, links, blockers, and major product decisions. Avoid
 implementation detail that belongs in commits or PR comments.
 
+When posting on behalf of a GitHub user, append the established attribution signature. Use
+`AFK Agent` in `mode=afk`; use `HITL Agent` in `mode=interactive`.
+
+```text
+🤖 *Posted by <AFK Agent | HITL Agent> on behalf of @<GitHub username>*
+```
+
 Comment format:
 
 ```text
@@ -52,6 +59,7 @@ PR: <url or none>
 Verification: <summary>
 Blockers: <none or details>
 Next: <human or workflow action>
+Attribution: 🤖 *Posted by <AFK Agent | HITL Agent> on behalf of @<GitHub username>*
 ```
 
 ## Stop

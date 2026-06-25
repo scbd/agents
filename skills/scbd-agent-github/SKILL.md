@@ -45,6 +45,13 @@ Add one PR comment per published iteration with action, files, technical decisio
 evidence, and next state. Reply to original review comments with the focused agent's proposed
 `#done` responses after verifying the changes.
 
+When posting PR comments or review replies on behalf of a GitHub user, append the established
+attribution signature. Use `AFK Agent` in `mode=afk`; use `HITL Agent` in `mode=interactive`.
+
+```text
+🤖 *Posted by <AFK Agent | HITL Agent> on behalf of @<GitHub username>*
+```
+
 ## Evidence
 
 Keep screenshots out of the project repository unless it explicitly stores PR assets.
