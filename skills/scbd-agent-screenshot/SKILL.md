@@ -1,6 +1,6 @@
 ---
 name: scbd-agent-screenshot
-description: Captures, crops, and verifies local screenshot evidence without git or external services. Use when an epic iteration or human needs publication-ready visual proof and suggested PR prose.
+description: Captures, crops, and verifies local screenshot evidence without git or external services. Use when a workflow iteration or human needs publication-ready visual proof and suggested PR prose.
 ---
 
 # scbd-agent-screenshot

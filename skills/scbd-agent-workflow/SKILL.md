@@ -1,13 +1,13 @@
 ---
-name: scbd-agent-epic
-description: Runs one Jira epic iteration, including workspace, agents, verification, external state, evidence, and handoff. Use for interactive or unattended epic work.
+name: scbd-agent-workflow
+description: Runs one Jira-backed workflow iteration, including workspace, agents, verification, external state, evidence, and handoff. Use for interactive or unattended SCBD agent workflow work.
 ---
 
-# scbd-agent-epic
+# scbd-agent-workflow
 
 Complete one iteration of an epic's highest-priority actionable work.
 
-**Usage:** `/scbd-agent-epic epic=<key> [component=<name>] [label=<label>] [mode=interactive|afk]`
+**Usage:** `/scbd-agent-workflow epic=<key> [component=<name>] [label=<label>] [mode=interactive|afk]`
 
 Read [REFERENCE.md](REFERENCE.md) before operating.
 
@@ -41,14 +41,14 @@ conditions.
 
 ## Ownership
 
-- Only this skill mutates Jira, git, or GitHub. Focused agents may edit files, test, and inspect those
-  systems read-only.
-- Load `scbd-agent-jira` before Jira mutations and `scbd-agent-github` before git/GitHub
-  publication, review replies, evidence hosting, or close-out.
+- This skill coordinates the workflow bookkeeping across Jira, git, and GitHub. Companion skills may
+  read or mutate those systems when explicitly invoked for their responsibility.
+- Load `scbd-agent-jira` before Jira state changes and `scbd-agent-github` before git/GitHub
+  branch, PR, review reply, evidence hosting, or close-out work.
 - For local work, dispatch one fresh `scbd-agent-plan`, `scbd-agent-implement`, or
   `scbd-agent-review` agent. One correction retry belongs to the same iteration. Apply
-  `scbd-agent-screenshot` in the epic agent's context; never delegate screenshot capture. The
-  epic agent alone hosts accepted artifacts and updates the PR.
+  `scbd-agent-screenshot` in the workflow agent's context; never delegate screenshot capture. Host
+  accepted artifacts and update the PR through `scbd-agent-github`.
 - Review output before publishing. After one failed correction, preserve state and stop for a human.
 - Follow `/karpathy-guidelines` when reviewing plans and code.
 

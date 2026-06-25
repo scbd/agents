@@ -1,4 +1,4 @@
-# Epic Iteration Reference
+# Workflow Iteration Reference
 
 ## Inputs
 
@@ -32,7 +32,7 @@ workspace, blocked ticket, or missing access requires handoff; do not choose ano
    Commit accepted changes if any, push once, publish needed evidence, reply to every comment with
    `#done`, and log. End: PR open; Jira `PEER REVIEW`.
 3. **Implement:** Jira `IN PROGRESS`; plan completed; no unresolved plan feedback; human approval in
-   interactive mode or accepted epic review in AFK. Safely fetch/switch to the feature branch and
+   interactive mode or accepted workflow review in AFK. Safely fetch/switch to the feature branch and
    match its remote without overwriting work. Run `scbd-agent-implement` with the plan. Remove the
    plan; create logical Conventional Commits; push; update draft PR summary/testing; publish evidence
    and log; keep draft state; transition Jira to `PEER REVIEW`; replace `ready-for-agent` with
@@ -89,7 +89,7 @@ never dispatch a screenshot agent. Give it deterministic local scenarios and a t
 directory. Review its handoff and inspect every image before publication. If capture is impractical,
 publish its prose fallback.
 
-The epic agent owns publication. Use `scbd-agent-github` for PR evidence hosting and publication
+The workflow agent owns publication. Use `scbd-agent-github` for PR evidence hosting and publication
 format.
 
 ## Logs

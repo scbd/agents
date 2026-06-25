@@ -38,7 +38,7 @@ several. If none exists, derive a decision-complete approach. Ask about unresolv
 
 ## Handoff
 
-Return these fields to the epic agent or human:
+Return these fields to the workflow agent or human:
 
 ```text
 Outcome: completed | blocked

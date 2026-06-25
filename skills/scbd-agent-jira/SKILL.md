@@ -6,7 +6,7 @@ description: Handles Jira state, labels, links, blockers, and audit comments for
 # scbd-agent-jira
 
 Operate on Jira for SCBD agent workflows. Read-only use is allowed for focused agents; mutations
-belong to the epic agent or a human explicitly operating this skill.
+belong to the workflow agent or a human explicitly operating this skill.
 
 **Usage:** `/scbd-agent-jira ticket=<key> [epic=<key>] action=<assess|start|peer-review|complete|log|link-pr>`
 

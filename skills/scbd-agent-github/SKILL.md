@@ -6,7 +6,7 @@ description: Handles git branches, commits, GitHub pull requests, review replies
 # scbd-agent-github
 
 Operate on local git and GitHub for SCBD agent workflows. Read-only use is allowed for focused
-agents; mutations belong to the epic agent or a human explicitly operating this skill.
+agents; mutations belong to the workflow agent or a human explicitly operating this skill.
 
 **Usage:** `/scbd-agent-github ticket=<key> action=<prepare-branch|open-pr|update-pr|reply-review|host-evidence|close-out>`
 
