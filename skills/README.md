@@ -45,13 +45,13 @@ Focused skills do one job and return a handoff.
 ## Invoking skills
 
 ```bash
-/scbd-agent-workflow epic=DEV-20 mode=interactive    # component from AGENTS.md
+/scbd-agent-workflow epic=DEV-20 mode=interactive # component from AGENTS.md
 /scbd-agent-workflow epic=DEV-20 component=Gaia/KM mode=afk
 /scbd-agent-jira ticket=DEV-123 action=assess
 /scbd-agent-github ticket=DEV-123 action=update-pr
 
-/scbd-agent-plan ticket=DEV-123 plan=docs/plans/DEV-123.md
-/scbd-agent-implement ticket=DEV-123             # discover plan, else implement directly
+/scbd-agent-plan ticket=DEV-123
+/scbd-agent-implement ticket=DEV-123 # discover plan, else implement directly
 /scbd-agent-implement ticket=DEV-123 plan=docs/plans/DEV-123.md
 /scbd-agent-review ticket=DEV-123
 /scbd-agent-screenshot output=/tmp/DEV-123-evidence
