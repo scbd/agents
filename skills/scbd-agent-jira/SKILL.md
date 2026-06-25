@@ -59,7 +59,7 @@ PR: <url or none>
 Verification: <summary>
 Blockers: <none or details>
 Next: <human or workflow action>
-Attribution: 🤖 *Posted by <AFK Agent | HITL Agent> on behalf of @<GitHub username>*
+🤖 *Posted by <AFK Agent | HITL Agent> on behalf of @<GitHub username>*
 ```
 
 ## Stop
