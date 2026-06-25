@@ -31,6 +31,17 @@ The workflow skill dispatches and reviews planning, implementation, and review a
 screenshot skill locally, then hosts accepted evidence and handles external state itself. Focused
 skills also run directly and return uncommitted work.
 
+## Workflow
+
+Use `scbd-agent-workflow` with a Jira epic when the agent should pick the next actionable ticket,
+run one planning, implementation, review, recovery, or close-out action, publish state, and stop.
+
+Use `mode=interactive` when a human should confirm phase boundaries and maybe provide instructions. Use `mode=afk` for unattended routine iterations; it still stops for blockers, unsafe state, red verification, or ambiguity.
+
+Use focused skills directly when the target is already known: plan or implement one Jira ticket,
+address one PR review cycle, capture screenshot evidence, or perform an explicit Jira/GitHub action.
+Focused skills do one job and return a handoff.
+
 ## Invoking skills
 
 ```bash
