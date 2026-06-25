@@ -48,17 +48,23 @@ evidence, and next state. Reply to original review comments with the focused age
 ## Evidence
 
 Keep screenshots out of the project repository unless it explicitly stores PR assets.
+Consume the `scbd-agent-screenshot` handoff when present: use its artifact paths, dimensions,
+scenarios, verification notes, publication readiness, and suggested `User-Facing Changes` /
+`Testing` prose.
 
 To host screenshots:
 
-1. Wrap each PNG in a text SVG containing an embedded `data:image/png;base64,...`.
-2. Create a secret gist with the SVG files. `gh gist create` creates secret gists by default; use
+1. Verify each supplied artifact exists, has nonzero size, matches the reported dimensions when
+   possible, and is not obviously blank or stale. Stop rather than hosting suspect evidence.
+2. Wrap each PNG in a text SVG containing an embedded `data:image/png;base64,...`.
+3. Create a secret gist with the SVG files. `gh gist create` creates secret gists by default; use
    `--public` only when explicitly requested.
-3. Fetch exact raw URLs with
+4. Fetch exact raw URLs with
    `gh api gists/<gist-id> --jq '.files | to_entries[] | [.key, .value.raw_url] | @tsv'`.
-4. Embed raw SVG URLs under `## User-Facing Changes`, link the gist, mention capture in
-   `## Testing`, and verify the rendered PR body.
-5. Remove temporary local artifacts after verifying the gist and PR update.
+5. Embed raw SVG URLs under `## User-Facing Changes`, preserve or adapt suggested screenshot prose,
+   link the gist, mention capture in `## Testing`, and verify the rendered PR body.
+6. Remove temporary hosting artifacts after verifying the gist and PR update. Preserve caller-owned
+   capture outputs unless explicitly told otherwise.
 
 Create an SVG wrapper with actual PNG dimensions:
 
