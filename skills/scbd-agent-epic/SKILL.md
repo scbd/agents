@@ -43,6 +43,8 @@ conditions.
 
 - Only this skill mutates Jira, git, or GitHub. Focused agents may edit files, test, and inspect those
   systems read-only.
+- Load `scbd-agent-jira` before Jira mutations and `scbd-agent-github` before git/GitHub
+  publication, review replies, evidence hosting, or close-out.
 - For local work, dispatch one fresh `scbd-agent-plan`, `scbd-agent-implement`, or
   `scbd-agent-review` agent. One correction retry belongs to the same iteration. Apply
   `scbd-agent-screenshot` in the epic agent's context; never delegate screenshot capture. The

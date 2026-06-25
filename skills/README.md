@@ -15,13 +15,15 @@ Contract:
 
 ## Available skills
 
-| Skill                      | Description                                                    | Dependencies                                           |
-| -------------------------- | -------------------------------------------------------------- | ------------------------------------------------------ |
-| `scbd-agent-epic`          | Orchestrate one Jira epic iteration and all external state     | `karpathy-guidelines`, `scbd-agent-screenshot`         |
-| `scbd-agent-plan`          | Plan one Jira ticket with read-only external context           | —                                                      |
-| `scbd-agent-implement`     | Implement one Jira ticket locally, with or without a plan      | `karpathy-guidelines`                                  |
-| `scbd-agent-review`        | Address one Jira ticket's review cycle locally                 | `karpathy-guidelines`                                  |
-| `scbd-agent-screenshot`    | Capture and verify local screenshot evidence                   | —                                                      |
+| Skill                      | Description                                                    | Dependencies                                                                                          |
+| -------------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `scbd-agent-epic`          | Orchestrate one Jira epic iteration and all external state     | `karpathy-guidelines`, `scbd-agent-jira`, `scbd-agent-github`, `scbd-agent-screenshot`                |
+| `scbd-agent-jira`          | Mutate and validate Jira state for SCBD agent workflows        | —                                                                                                     |
+| `scbd-agent-github`        | Mutate and validate git/GitHub state for SCBD agent workflows  | —                                                                                                     |
+| `scbd-agent-plan`          | Plan one Jira ticket with read-only external context           | —                                                                                                     |
+| `scbd-agent-implement`     | Implement one Jira ticket locally, with or without a plan      | `karpathy-guidelines`                                                                                 |
+| `scbd-agent-review`        | Address one Jira ticket's review cycle locally                 | `karpathy-guidelines`                                                                                 |
+| `scbd-agent-screenshot`    | Capture and verify local screenshot evidence                   | —                                                                                                     |
 
 The epic skill dispatches and reviews planning, implementation, and review agents, applies the
 screenshot skill locally, then hosts accepted evidence and handles external state itself. Focused
@@ -32,6 +34,8 @@ skills also run directly and return uncommitted work.
 ```bash
 /scbd-agent-epic epic=DEV-20 mode=interactive    # component from AGENTS.md
 /scbd-agent-epic epic=DEV-20 component=Gaia/KM mode=afk
+/scbd-agent-jira ticket=DEV-123 action=assess
+/scbd-agent-github ticket=DEV-123 action=update-pr
 
 /scbd-agent-plan ticket=DEV-123 plan=docs/plans/DEV-123.md
 /scbd-agent-implement ticket=DEV-123             # discover plan, else implement directly

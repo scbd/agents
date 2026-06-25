@@ -12,16 +12,15 @@
 ## Select
 
 Before mutations, read project instructions, workspace and branch state, recent commits, remotes,
-Jira epic/component tickets and dependencies, and linked PRs. Match PRs by ticket reference and
-`feature/<ticket-key>-*`.
+Jira epic/component tickets and dependencies, and linked PRs. Load `scbd-agent-jira` for Jira state
+rules and `scbd-agent-github` for branch/PR matching and publication rules.
 
 Never discard, overwrite, stash, or rewrite unexplained work. Recover relevant dirty or interrupted
 work first: preserve branch/files, infer its ticket/action from Jira, PR, plan, and local state, then
 resume that matrix row. Log the recovery. If ownership is ambiguous, stop for a human.
 
-Otherwise select the first matching action below. An `is blocked by` target blocks unless `Done` or
-`Completed`. A closed-unmerged PR, ambiguous mapping, unsafe workspace, or missing access requires
-handoff; do not choose another ticket.
+Otherwise select the first matching action below. A closed-unmerged PR, ambiguous mapping, unsafe
+workspace, blocked ticket, or missing access requires handoff; do not choose another ticket.
 
 ## Lifecycle (first match wins)
 
@@ -45,9 +44,9 @@ handoff; do not choose another ticket.
    summarizing plan/state; link the PR milestone. In AFK, record approval for later implementation.
    End: draft PR; Jira `IN PROGRESS`; no feature code.
 
-Keep Jira and PR coherent at phase boundaries. If preparation fails after a Jira mutation, log failure
-there before handoff. Never push to `main`. Verify every external mutation. Never change PR draft
-status; only a human marks it ready.
+Keep Jira and PR coherent at phase boundaries. Use `scbd-agent-jira` and `scbd-agent-github` for
+external mutations, logs, comments, labels, PR bodies, review replies, branch cleanup, and evidence
+hosting. Verify every external mutation.
 
 ## Interactive Mode
 
@@ -90,50 +89,13 @@ never dispatch a screenshot agent. Give it deterministic local scenarios and a t
 directory. Review its handoff and inspect every image before publication. If capture is impractical,
 publish its prose fallback.
 
-The epic agent owns publication:
-
-1. Keep screenshots out of the project repository unless it explicitly stores PR assets.
-2. To host on GitHub Gist, wrap each PNG in a text SVG containing an embedded
-   `data:image/png;base64,...`; `gh gist create` rejects binary PNG files.
-3. Create a secret gist with the SVG files. `gh gist create` creates secret gists by default; some
-   versions do not support `--secret`. Use `--public` only when explicitly requested.
-4. Fetch exact raw URLs with
-   `gh api gists/<gist-id> --jq '.files | to_entries[] | [.key, .value.raw_url] | @tsv'`; never infer
-   raw URLs from the gist web URL.
-5. Embed the raw SVG URLs under `## User-Facing Changes`, link the gist, mention capture in
-   `## Testing`, and verify the rendered PR body.
-6. Remove temporary local artifacts after verifying the gist and PR update.
-
-Create an SVG wrapper with the PNG's actual dimensions:
-
-```bash
-node -e "const fs=require('fs'); const [src,out,w,h]=process.argv.slice(1); const b64=fs.readFileSync(src).toString('base64'); fs.writeFileSync(out, '<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"'+w+'\" height=\"'+h+'\" viewBox=\"0 0 '+w+' '+h+'\"><image width=\"'+w+'\" height=\"'+h+'\" href=\"data:image/png;base64,'+b64+'\"/></svg>')" screenshot.png screenshot.svg 1200 800
-```
-
-Use `file screenshot.png` to obtain dimensions when image tooling is unavailable.
+The epic agent owns publication. Use `scbd-agent-github` for PR evidence hosting and publication
+format.
 
 ## Logs
 
-Use Jira for milestones, states, links, blockers, and major product decisions; avoid implementation
-detail. Keep current state in the PR body:
-
-```markdown
-## Summary
-Closes [<ticket-key>](<jira-url>)
-
-## Plan or Implementation
-<current description>
-
-## Testing
-<verification>
-
-## User-Facing Changes
-<evidence or prose fallback, if applicable>
-```
-
-Add one PR comment per published iteration: action, files, technical decisions, verification,
-evidence, next state. Keep review replies on original comments with `#done`. Use established agent
-attribution when posting for a user.
+Use `scbd-agent-jira` for milestone, state, link, blocker, and decision logs. Use
+`scbd-agent-github` for PR body updates, PR comments, review replies, and hosted evidence.
 
 ## Stop
 
