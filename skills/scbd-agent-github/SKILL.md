@@ -22,7 +22,8 @@ agents; mutations belong to the workflow agent or a human explicitly operating t
 
 ## Pull Requests
 
-New PRs target `main`, remain draft, and link the Jira ticket. Never change draft status; only a
+Unless specified otherwise, new PRs target GitHub's "Default branch" (generally `master` or `main`), 
+remain draft, and link the Jira ticket. Never change draft status; only a
 human marks a PR ready.
 
 Keep the PR body current:
