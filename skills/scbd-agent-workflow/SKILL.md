@@ -5,23 +5,29 @@ description: Runs one Jira-backed workflow iteration, including workspace, agent
 
 # scbd-agent-workflow
 
-Complete one iteration of an epic's highest-priority actionable work.
+Complete one iteration for a Jira key, treating epics as queues and issues as targeted lifecycle
+work.
 
-**Usage:** `/scbd-agent-workflow epic=<key> [component=<name>] [label=<label>] [mode=interactive|afk]`
+**Usage:** `/scbd-agent-workflow <jira-key> [component=<name>] [label=<label>] [mode=interactive|afk]`
 
 Read [REFERENCE.md](REFERENCE.md) before operating.
 
 ## Arguments
 
-| Parameter   | Default                    | Requirement                                |
-| ----------- | -------------------------- | ------------------------------------------ |
-| `epic`      | none                       | Required Jira epic key                     |
-| `component` | project's `scbd_component` | Required after fallback                    |
-| `label`     | `ready-for-agent`          | Intake filter for new `TO DO` tickets only |
-| `mode`      | `interactive`              | `interactive` or `afk`                     |
+| Parameter    | Default                    | Requirement                                      |
+| ------------ | -------------------------- | ------------------------------------------------ |
+| `<jira-key>` | none                       | Required Jira epic or issue key                  |
+| `component`  | project's `scbd_component` | Required after fallback for epic queue selection |
+| `label`      | `ready-for-agent`          | Intake filter for epic-mode new `TO DO` tickets  |
+| `mode`       | `interactive`              | `interactive` or `afk`                           |
 
-Accept legacy positional arguments; prefer key-value arguments. Read `scbd_plan_dir` from the
-project's `AGENTS.md`; default to `docs/plans`.
+Prefer the Jira key as the first positional argument. Accept legacy `epic=<key>` and `ticket=<key>`
+aliases, but normalize them to the same Jira key input. Accept `mode=<mode>` and `mode: <mode>`.
+Read `scbd_plan_dir` from the project's `AGENTS.md`; default to `docs/plans`.
+
+Inspect the Jira key before selecting work. If it is an epic, select the next actionable issue from
+that epic/component queue. If it is an issue, do not scan for other work; resume that issue's
+lifecycle and perform the next matching action.
 
 ## One-iteration Contract
 

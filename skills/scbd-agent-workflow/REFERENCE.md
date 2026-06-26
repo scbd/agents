@@ -2,28 +2,37 @@
 
 ## Inputs
 
-1. Require `epic`; otherwise show usage and stop unchanged.
-2. Resolve `component` from arguments, then project `AGENTS.md`'s `scbd_component`; otherwise explain
-   both options and stop.
-3. Default `label` to `ready-for-agent`. Filter only new `TO DO` intake, never started work.
-4. Require `mode=interactive|afk`.
-5. Resolve `scbd_plan_dir`; default to `docs/plans`.
+1. Require one Jira key as the first positional argument; otherwise show usage and stop unchanged.
+   Accept legacy `epic=<key>` and `ticket=<key>` aliases, but normalize them to the same Jira key.
+2. Inspect Jira for that key before selecting work. If its issue type is Epic or it is otherwise the
+   project's epic-level container, use epic queue mode. Otherwise use targeted issue mode.
+3. Resolve `component` from arguments, then project `AGENTS.md`'s `scbd_component`. It is required
+   for epic queue selection; for targeted issue mode, use it for validation when present but never use
+   it to select a different issue.
+4. Default `label` to `ready-for-agent`. Filter only epic-mode new `TO DO` intake, never started or
+   targeted issue work.
+5. Require `mode=interactive|afk`. Accept either `mode=<mode>` or `mode: <mode>` syntax and
+   normalize before validation.
+6. Resolve `scbd_plan_dir`; default to `docs/plans`.
 
 ## Select
 
 Before mutations, read project instructions, workspace and branch state, recent commits, remotes,
-Jira epic/component tickets and dependencies, and linked PRs. Load `scbd-agent-jira` for Jira state
-rules and `scbd-agent-github` for branch/PR matching and publication rules.
+Jira target scope and dependencies, and linked PRs. In epic queue mode, target scope is the
+epic/component ticket set. In targeted issue mode, target scope is only that issue, plus its
+epic/parent metadata when available. Load `scbd-agent-jira` for Jira state rules and
+`scbd-agent-github` for branch/PR matching and publication rules.
 
 Never discard, overwrite, stash, or rewrite unexplained work. Recover relevant dirty or interrupted
 work first: preserve branch/files, infer its ticket/action from Jira, PR, plan, and local state, then
 resume that matrix row. Log the recovery. If ownership is ambiguous, stop for a human.
 
-Otherwise select the first matching action below. During Plan selection only, skip blocked
-label-matching `TO DO` intake tickets and continue to the next unblocked candidate; record each
-skipped ticket and blocker in the final handoff. A closed-unmerged PR, ambiguous mapping, unsafe
-workspace, blocked active or recovery ticket, or missing access requires handoff; do not choose
-another ticket.
+Otherwise select the first matching action below. In targeted issue mode, evaluate only the supplied
+issue; if it is blocked, ambiguous, unsafe, inaccessible, or has no matching lifecycle action, stop
+with a handoff. In epic queue mode during Plan selection only, skip blocked label-matching `TO DO`
+intake tickets and continue to the next unblocked candidate; record each skipped ticket and blocker
+in the final handoff. A closed-unmerged PR, ambiguous mapping, unsafe workspace, blocked active or
+recovery ticket, or missing access requires handoff; do not choose another ticket.
 
 ## Lifecycle (first match wins)
 
@@ -42,13 +51,16 @@ another ticket.
    plan; create logical Conventional Commits; push; update draft PR summary/testing; publish evidence
    and log; keep draft state; transition Jira to `PEER REVIEW`; replace `ready-for-agent` with
    `ready-for-human`; link the PR milestone. End: draft unchanged; Jira `PEER REVIEW`.
-4. **Plan:** First unblocked, label-matching `TO DO` after skipping blocked intake candidates;
-   order by priority then creation. Transition to
-   `IN PROGRESS`; assign the current Jira user; create `feature/<ticket-key>-<short-slug>` from current
-   `main`; choose `<plan-dir>/<ticket-key>.md`; run `scbd-agent-plan`. Commit only the plan as
-   `docs(<ticket-key>): add implementation plan`; push; open a draft PR to `main` linking Jira and
-   summarizing plan/state; link the PR milestone. In AFK, record approval for later implementation.
-   End: draft PR; Jira `IN PROGRESS`; no feature code.
+4. **Plan:** Target candidate is:
+   - In targeted issue mode, the supplied issue when it is unblocked and `TO DO`; ignore the intake
+     label.
+   - In epic queue mode, the first unblocked, label-matching `TO DO` after skipping blocked intake
+     candidates; order by priority then creation.
+   Transition to `IN PROGRESS`; assign the current Jira user; create
+   `feature/<ticket-key>-<short-slug>` from current `main`; choose `<plan-dir>/<ticket-key>.md`; run
+   `scbd-agent-plan`. Commit only the plan as `docs(<ticket-key>): add implementation plan`; push;
+   open a draft PR to `main` linking Jira and summarizing plan/state; link the PR milestone. In AFK,
+   record approval for later implementation. End: draft PR; Jira `IN PROGRESS`; no feature code.
 
 Keep Jira and PR coherent at phase boundaries. Use `scbd-agent-jira` and `scbd-agent-github` for
 external mutations, logs, comments, labels, PR bodies, review replies, branch cleanup, and evidence
@@ -107,8 +119,9 @@ Use `scbd-agent-jira` for milestone, state, link, blocker, and decision logs. Us
 
 Stop without selecting other work for ambiguous ownership/recovery, closed-unmerged PRs, unavailable
 credentials/transitions/branches/state, blocked active or recovery work, red verification, failed
-correction, human judgment, or an irreconcilable partial mutation. Blocked `TO DO` intake tickets
-encountered during Plan selection are skipped, not stop conditions. Log only to a certain destination. Preserve files and branch.
+correction, human judgment, no matching lifecycle action for a targeted issue, or an irreconcilable
+partial mutation. In epic queue mode only, blocked `TO DO` intake tickets encountered during Plan
+selection are skipped, not stop conditions. Log only to a certain destination. Preserve files and branch.
 
 Always finish with:
 

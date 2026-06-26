@@ -33,10 +33,14 @@ skills also run directly and return uncommitted work.
 
 ## Workflow
 
-Use `scbd-agent-workflow` with a Jira epic when the agent should pick the next actionable ticket,
-run one planning, implementation, review, recovery, or close-out action, publish state, and stop.
+Invoke `scbd-agent-workflow` with a Jira key. If the key is an epic, the agent should pick the next
+actionable ticket from the queue, run one planning, implementation, review, recovery, or close-out
+action, publish state, and stop. If the key is a specific Jira issue, the agent should resume that
+issue's lifecycle, perform the next matching action, and stop without scanning for other work.
 
-Use `mode=interactive` when a human should confirm phase boundaries and maybe provide instructions. Use `mode=afk` for unattended routine iterations; it still stops for blockers, unsafe state, red verification, or ambiguity.
+Use `mode=interactive` or `mode: interactive` when a human should confirm phase boundaries and maybe
+provide instructions. Use `mode=afk` or `mode: afk` for unattended routine iterations; it still stops
+for blockers, unsafe state, red verification, or ambiguity.
 
 Use focused skills directly when the target is already known: plan or implement one Jira ticket,
 address one PR review cycle, capture screenshot evidence, or perform an explicit Jira/GitHub action.
@@ -45,8 +49,9 @@ Focused skills do one job and return a handoff.
 ## Invoking skills
 
 ```bash
-/scbd-agent-workflow epic=DEV-20 mode=interactive # component from AGENTS.md
-/scbd-agent-workflow epic=DEV-20 component=Gaia/KM mode=afk
+/scbd-agent-workflow DEV-20 mode=interactive # component from AGENTS.md
+/scbd-agent-workflow DEV-20 component=Gaia/KM mode: afk
+/scbd-agent-workflow DEV-123 mode=interactive
 /scbd-agent-jira ticket=DEV-123 action=assess
 /scbd-agent-github ticket=DEV-123 action=update-pr
 

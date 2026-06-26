@@ -29,17 +29,17 @@ human marks a PR ready.
 Keep the PR body current:
 
 ```markdown
-## Summary
-Closes [<ticket-key>](<jira-url>)
-
-## Plan or Implementation
-<current description>
+## Details
+<description>
 
 ## Testing
 <verification>
 
 ## User-Facing Changes
 <evidence or prose fallback, if applicable>
+
+## Summary
+Closes [<ticket-key>](<jira-url>) <if belongs to epic: from epic [<ticket-key>](<jira-url>)>
 ```
 
 Add one PR comment per published iteration with action, files, technical decisions, verification,
