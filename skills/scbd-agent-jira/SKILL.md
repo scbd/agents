@@ -108,6 +108,11 @@ supplied by the caller.
 - Link PR milestones using the relationship or link convention available in the project.
 - If preparation fails after a Jira mutation, add a concise failure/blocker comment before stopping.
 
+For workflow audit logs, post comments with the dedicated comment endpoint before or after the
+transition, not inside the transition payload. Jira transition calls return `204 No Content` and may
+not create bundled comments consistently across workflow screens. Verify the transition state and
+latest audit comment with separate readbacks.
+
 ## Comments
 
 Use Jira for milestones, state changes, links, blockers, and major product decisions. Avoid
