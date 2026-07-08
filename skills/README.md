@@ -97,3 +97,20 @@ Install these once, globally:
 ```bash
 npx skills add multica-ai/andrej-karpathy-skills --skill karpathy-guidelines -g
 ```
+
+## Jira credentials
+
+The Jira skills talk to `https://scbd.atlassian.net` over REST. Credentials live in `curl`'s
+`~/.netrc` so the token never enters a command line, the agent context, or a process listing — the
+skill authenticates with `curl --netrc` and never handles the token directly.
+
+Set this up once. The `password` is an Atlassian API token from
+https://id.atlassian.com/manage-profile/security/api-tokens, not an account password:
+
+```bash
+printf 'machine scbd.atlassian.net login %s password %s\n' \
+  you@example.com YOUR_API_TOKEN >> ~/.netrc
+chmod 600 ~/.netrc
+```
+
+On a `401`/`403`, the Jira skill stops and asks the human to check or install this entry.

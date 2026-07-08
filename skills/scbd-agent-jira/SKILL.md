@@ -16,41 +16,71 @@ skill.
 Require a ticket or epic key and the intended action. Resolve component from arguments, then project
 `AGENTS.md`'s `scbd_component`. Default intake label is `ready-for-agent`.
 
-Use Jira REST as the normal path. Before any Jira read or mutation, check that these environment
-variables are available:
+Use Jira REST as the normal path. The Jira site is the well-known SCBD host
+`https://scbd.atlassian.net` — no environment variable is required. Credentials live in a `curl`
+netrc file, so the token never touches a command line, the agent context, or a process listing:
 
 ```bash
-JIRA_SITE      # example: https://scbd.atlassian.net
-JIRA_EMAIL     # Atlassian account email
-JIRA_API_TOKEN # Atlassian API token
+~/.netrc   # curl reads Jira credentials from here; the agent never handles the token
 ```
 
-If any are missing, ask the user to define them in their shell startup/private secrets file and stop
-before Jira work. Do not fall back to connector/MCP Jira tools unless the user explicitly asks for
-that fallback.
+The Jira entry in `~/.netrc` is a single line, then lock the file with `chmod 600 ~/.netrc`:
 
-Never print or write `JIRA_API_TOKEN`, bearer tokens, cookies, or full auth headers. If a token
-appears in a repo file, command output, comment, PR, or handoff, tell the user to rotate/revoke it
-and remove it immediately.
+```text
+machine scbd.atlassian.net login you@example.com password <atlassian-api-token>
+```
+
+The `machine` value is the bare `scbd.atlassian.net` host — no scheme, no path, no port. The
+`password` is an Atlassian API token from https://id.atlassian.com/manage-profile/security/api-tokens,
+not an account password.
+
+Make the Jira call and react to the response status (see the `401`/`403` handling below). Do not fall
+back to connector/MCP Jira tools unless the user explicitly asks for that fallback.
+
+Never read, print, or write the netrc file contents, API tokens, bearer tokens, cookies, or full auth
+headers. Let `curl --netrc` supply credentials on its own. If a token appears in a repo file, command
+output, comment, PR, or handoff, tell the user to rotate/revoke it and remove it immediately.
 
 ## REST Usage
 
 Use Jira Cloud REST endpoints directly:
 
-- Search: `GET $JIRA_SITE/rest/api/3/search/jql`
-- Long search: `POST $JIRA_SITE/rest/api/3/search/jql`
-- Issue: `GET $JIRA_SITE/rest/api/3/issue/<key>`
-- Edit issue or labels: `PUT $JIRA_SITE/rest/api/3/issue/<key>`
-- Current user: `GET $JIRA_SITE/rest/api/3/myself`
-- Assign issue: `PUT $JIRA_SITE/rest/api/3/issue/<key>/assignee`
-- Transitions: `GET $JIRA_SITE/rest/api/3/issue/<key>/transitions`
-- Transition: `POST $JIRA_SITE/rest/api/3/issue/<key>/transitions`
-- Add comment: `POST $JIRA_SITE/rest/api/3/issue/<key>/comment`
-- Update comment: `PUT $JIRA_SITE/rest/api/3/issue/<key>/comment/<comment-id>`
-- Link issue: `POST $JIRA_SITE/rest/api/3/issueLink`
+Base URL: `https://scbd.atlassian.net`.
 
-Authenticate with basic auth using `$JIRA_EMAIL:$JIRA_API_TOKEN`. Prefer `curl --get` with
-`--data-urlencode` for JQL queries so quoting remains predictable.
+- Search: `GET /rest/api/3/search/jql`
+- Long search: `POST /rest/api/3/search/jql`
+- Issue: `GET /rest/api/3/issue/<key>`
+- Edit issue or labels: `PUT /rest/api/3/issue/<key>`
+- Current user: `GET /rest/api/3/myself`
+- Assign issue: `PUT /rest/api/3/issue/<key>/assignee`
+- Transitions: `GET /rest/api/3/issue/<key>/transitions`
+- Transition: `POST /rest/api/3/issue/<key>/transitions`
+- Add comment: `POST /rest/api/3/issue/<key>/comment`
+- Update comment: `PUT /rest/api/3/issue/<key>/comment/<comment-id>`
+- Link issue: `POST /rest/api/3/issueLink`
+
+Authenticate with `curl --netrc` so credentials come from `~/.netrc`, never from `-u`/`--user` or an
+inline `Authorization` header. Prefer `curl --get` with `--data-urlencode` for JQL queries so quoting
+stays predictable, and capture the HTTP status on every call so a `401` is caught:
+
+```bash
+curl -s --netrc -w '\n%{http_code}\n' --get \
+  --data-urlencode 'jql=project = SCBD AND statusCategory != Done' \
+  --data-urlencode 'fields=summary,status' \
+  "https://scbd.atlassian.net/rest/api/3/search/jql"
+```
+
+On a `401 Unauthorized` (or `403`), stop Jira work and treat it as a missing or misconfigured
+`~/.netrc` — do not retry blindly, print the token, or switch to inline credentials. Tell the human
+to check or install `~/.netrc`, and show:
+
+- Expected file: `~/.netrc`, permissions `600` (`chmod 600 ~/.netrc`).
+- Expected line: `machine scbd.atlassian.net login <email> password <atlassian-api-token>`.
+- Token source: https://id.atlassian.com/manage-profile/security/api-tokens (API token, not a
+  password).
+- Check after fixing (prints only the status, never the token):
+  `curl -s --netrc -o /dev/null -w '%{http_code}\n' https://scbd.atlassian.net/rest/api/3/myself`
+  (expect `200`).
 
 ## Read Strategy
 
