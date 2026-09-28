@@ -72,7 +72,8 @@ description in the browser.
 
 ## Review threads
 
-Fetch unresolved review threads and existing replies with `gh api graphql`:
+Fetch unresolved review threads and existing replies with `gh api graphql`. Include each thread's
+`id` — replying to it needs that, not the PR number:
 
 ```bash
 gh api graphql -f query='
@@ -81,6 +82,7 @@ query($owner:String!, $repo:String!, $pr:Int!) {
     pullRequest(number:$pr) {
       reviewThreads(first: 50) {
         nodes {
+          id
           isResolved
           comments(first: 20) {
             nodes { id author { login } body url }
@@ -92,9 +94,21 @@ query($owner:String!, $repo:String!, $pr:Int!) {
 }' -f owner=<org> -f repo=<repo> -F pr=<number>
 ```
 
-A thread is already handled when its last comment ends with `#done`; skip those. For the rest, post
-one reply per handled thread with `gh api graphql` (`addPullRequestReviewThreadReply`) or
-`gh pr comment` for top-level conversation comments, depending on where the original comment lives.
+A thread is already handled when any of its replies contains `#done`, anywhere in the body — the
+attribution signature comes after it, so don't match on "ends with". Skip those threads.
+
+For the rest, post one reply per handled thread on its own thread `id`:
+
+```bash
+gh api graphql -f query='
+mutation($threadId:ID!, $body:String!) {
+  addPullRequestReviewThreadReply(input: { pullRequestReviewThreadId: $threadId, body: $body }) {
+    comment { id url }
+  }
+}' -f threadId=<thread-id> -f body="<reply text>"
+```
+
+Use `gh pr comment` instead for top-level conversation comments that aren't part of a review thread.
 
 Reply formats:
 
@@ -122,5 +136,6 @@ gh api user -q .login
 ## Action policy
 
 Branch creation and local commits (once the human has handed over autonomy, or asks) go ahead.
-Pushing, creating or editing a PR, and posting comments or replies all follow the action policy in
-`skills/README.md`: list the exact actions, wait for OK, then run them and verify the result.
+Pushing, creating or editing a PR, and posting comments or replies: list the exact actions, wait for
+OK, then run them and verify the result. For dev work, this is `scbd-dev-agent`'s action policy;
+this skill also stands alone for ad-hoc requests.

@@ -21,7 +21,7 @@ The `name` must match the directory name. The `description` is what the harness 
 
 ## Naming
 
-- `scbd-dev-*` — development skills, one per task (start, plan, implement, screenshot, PR, feedback, finish, next).
+- `scbd-dev-*` — development skills, one per task (agent, start, plan, implement, screenshot, PR, feedback, finish, next).
 - `scbd-planning-*` — planning skills (backlog and product work). Reserved; none exist yet.
 - `scbd-<system>` — shared, unprefixed skills for one external system, used by both development and planning skills (`scbd-jira`, `scbd-github`).
 

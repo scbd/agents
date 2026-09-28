@@ -77,8 +77,8 @@ labels` to confirm the result before reporting success.
 | `Peer Review` | An open PR is the source of truth for the work                                           |
 | `Done`        | The matching PR is merged, or the work was explicitly closed                             |
 
-Status names are case-sensitive as written above. The default intake label is `ready-for-agent`;
-swap it for `ready-for-human` once implementation is published (see `scbd-dev-pr`).
+Use the status names exactly as written above. The default intake label is `ready-for-agent`; swap
+it for `ready-for-human` once implementation is published (see `scbd-dev-pr`).
 
 ## Blockers
 
@@ -115,6 +115,6 @@ nothing is assigned, ask the human for their display name instead of guessing.)
 
 ## Action policy
 
-Reads run freely. Every transition, assignment, label change, comment, and link follows the action
-policy in `skills/README.md`: list the exact `acli` calls, wait for the human's OK, then run them and
-read the result back to confirm.
+Reads run freely. Every transition, assignment, label change, comment, and link: list the exact
+`acli` calls, wait for the human's OK, then run them and read the result back to confirm. For dev
+work, this is `scbd-dev-agent`'s action policy; this skill also stands alone for ad-hoc requests.
