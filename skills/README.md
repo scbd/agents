@@ -18,16 +18,16 @@ ahead, anything that leaves the machine is listed and confirmed first.
 
 ## Development skills
 
-| Skill                  | Description                                                                 |
-| ----------------------- | ------------------------------------------------------------------------------ |
-| `scbd-dev-start`       | Pick up a ticket, the next ready ticket in an epic, or ticketless work        |
-| `scbd-dev-plan`        | Think a task through and write an implementation plan                        |
-| `scbd-dev-implement`   | Build from a plan or the conversation, committing chunks when asked          |
-| `scbd-dev-screenshot`  | Capture screenshots into `.scratch/`, plus PR text with placeholders         |
-| `scbd-dev-pr`          | Push and create or update a draft pull request                              |
-| `scbd-dev-feedback`    | Triage PR review comments, fix, and draft replies                           |
-| `scbd-dev-finish`      | After merge: mark Jira `Done`, delete the local branch                       |
-| `scbd-dev-next`        | Report where work stands and recommend the next command                      |
+| Skill                 | Description                                                            |
+| --------------------- | ---------------------------------------------------------------------- |
+| `scbd-dev-start`      | Pick up a ticket, the next ready ticket in an epic, or ticketless work |
+| `scbd-dev-plan`       | Think a task through and write an implementation plan                  |
+| `scbd-dev-implement`  | Build from a plan or the conversation, committing chunks when asked    |
+| `scbd-dev-screenshot` | Capture screenshots into `.scratch/`, plus PR text with placeholders   |
+| `scbd-dev-pr`         | Push and create or update a draft pull request                         |
+| `scbd-dev-feedback`   | Triage PR review comments, fix, and draft replies                      |
+| `scbd-dev-finish`     | After merge: mark Jira `Done`, delete the local branch                 |
+| `scbd-dev-next`       | Report where work stands and recommend the next command                |
 
 ## Planning skills
 
@@ -35,10 +35,10 @@ Reserved namespace: `scbd-planning-*`. Nothing is published under it yet.
 
 ## Shared skills
 
-| Skill        | Description                                                                          |
-| ------------- | ---------------------------------------------------------------------------------------- |
-| `scbd-jira`  | `acli` cheat sheet and team conventions for Jira: status, labels, comments, links       |
-| `scbd-github` | Branch, commit, and PR conventions; fetching and replying to review threads             |
+| Skill         | Description                                                                       |
+| ------------- | --------------------------------------------------------------------------------- |
+| `scbd-jira`   | `acli` cheat sheet and team conventions for Jira: status, labels, comments, links |
+| `scbd-github` | Branch, commit, and PR conventions; fetching and replying to review threads       |
 
 These two are unprefixed because they're shared by both development and planning work, and also run
 directly for ad-hoc requests ("move DEV-12 to Peer Review", "what's the unresolved review feedback
@@ -73,12 +73,12 @@ issue, or no ticket at all.
 
 ### Action policy
 
-| Tier                 | Examples                                                    | Rule                                                        |
-| --------------------- | -------------------------------------------------------------- | ---------------------------------------------------------------- |
-| Local                 | Read, edit, test, create/switch a branch                      | Go ahead                                                        |
-| Local history         | Commit on a feature branch                                    | Only once the human has handed over autonomy, or asks           |
-| Leaves the machine    | Push, create/edit PR, PR comments/replies, any Jira change    | List the exact actions, wait for OK, then run them and verify   |
-| Never                 | Push to the default branch, mark a PR ready, force-push, `reset --hard`, discard or stash unexplained work | Refuse and explain |
+| Tier               | Examples                                                                                                   | Rule                                                          |
+| ------------------ | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| Local              | Read, edit, test, create/switch a branch                                                                   | Go ahead                                                      |
+| Local history      | Commit on a feature branch                                                                                 | Only once the human has handed over autonomy, or asks         |
+| Leaves the machine | Push, create/edit PR, PR comments/replies, any Jira change                                                 | List the exact actions, wait for OK, then run them and verify |
+| Never              | Push to the default branch, mark a PR ready, force-push, `reset --hard`, discard or stash unexplained work | Refuse and explain                                            |
 
 - Running a command whose whole purpose is publishing (`/scbd-dev-pr`) still shows the itemised
   actions first. One confirmation covers the whole list, and the human can edit it.
@@ -206,9 +206,9 @@ only, so `.scratch/` content is never committed by accident even before that ste
 
 Install these once, globally:
 
-| Skill                 | Source                              | Required by                                                          |
-| ---------------------- | -------------------------------------- | ------------------------------------------------------------------------ |
-| `karpathy-guidelines`  | `multica-ai/andrej-karpathy-skills`   | `scbd-dev-plan`, `scbd-dev-implement`, `scbd-dev-feedback`             |
+| Skill                 | Source                              | Required by                                                |
+| --------------------- | ----------------------------------- | ---------------------------------------------------------- |
+| `karpathy-guidelines` | `multica-ai/andrej-karpathy-skills` | `scbd-dev-plan`, `scbd-dev-implement`, `scbd-dev-feedback` |
 
 ```bash
 npx skills add multica-ai/andrej-karpathy-skills --skill karpathy-guidelines -g

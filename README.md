@@ -14,11 +14,25 @@ npx skills add scbd/agents -g
 
 ## Prerequisites
 
-Install the external skills that the bundled skills depend on:
+- [`acli`](https://developer.atlassian.com/cloud/acli/) installed and authenticated against your
+  Jira site (`acli jira auth status`). Jira skills use `acli` only — no REST calls, no tokens in
+  `~/.netrc`.
+- [`gh`](https://cli.github.com/) installed and authenticated (`gh auth status`).
+- The external skills that the bundled skills depend on:
 
-```bash
-npx skills add multica-ai/andrej-karpathy-skills --skill karpathy-guidelines -g
-```
+  ```bash
+  npx skills add multica-ai/andrej-karpathy-skills --skill karpathy-guidelines -g
+  ```
+
+- A one-time, per-machine git ignore for `.scratch/`, the directory skills use for plans,
+  screenshots, and other working files. This covers every project without touching any repo's own
+  `.gitignore`:
+
+  ```bash
+  mkdir -p ~/.config/git && echo '.scratch/' >> ~/.config/git/ignore
+  ```
+
+  A project that wants to commit `.scratch/` content can add a negation to its own `.gitignore`.
 
 ## Update
 
@@ -27,6 +41,21 @@ Keep all installed skills up to date:
 ```bash
 npx skills update -g
 ```
+
+## Migrating from `scbd-agent-*`
+
+The `scbd-agent-*` skills were replaced by task-shaped `scbd-dev-*` commands, plus the shared
+`scbd-jira` and `scbd-github` skills. `npx skills update -g` does not remove renamed skills, so
+existing installs need one manual cleanup step:
+
+```bash
+npx skills remove scbd-agent-workflow scbd-agent-plan scbd-agent-implement scbd-agent-review \
+  scbd-agent-screenshot scbd-agent-jira scbd-agent-github -g -y
+npx skills add scbd/agents -g
+```
+
+This also removes any hand-installed REST-based `scbd-agent-jira` copy — Jira access now goes
+through `acli` only.
 
 ## Skills catalog
 

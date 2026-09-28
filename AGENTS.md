@@ -19,6 +19,12 @@ description: One-sentence description of what the skill does and when to use it.
 
 The `name` must match the directory name. The `description` is what the harness uses to decide when to auto-trigger the skill.
 
+## Naming
+
+- `scbd-dev-*` — development skills, one per task (start, plan, implement, screenshot, PR, feedback, finish, next).
+- `scbd-planning-*` — planning skills (backlog and product work). Reserved; none exist yet.
+- `scbd-<system>` — shared, unprefixed skills for one external system, used by both development and planning skills (`scbd-jira`, `scbd-github`).
+
 ## Workflow documentation
 
 Use [`skills/README.md`](skills/README.md) as the canonical catalog for skill inventory, invocation,

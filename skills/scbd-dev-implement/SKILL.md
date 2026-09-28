@@ -66,12 +66,12 @@ issue, or no ticket at all.
 
 ### Action policy
 
-| Tier                 | Examples                                                    | Rule                                                        |
-| --------------------- | -------------------------------------------------------------- | ---------------------------------------------------------------- |
-| Local                 | Read, edit, test, create/switch a branch                      | Go ahead                                                        |
-| Local history         | Commit on a feature branch                                    | Only once the human has handed over autonomy, or asks           |
-| Leaves the machine    | Push, create/edit PR, PR comments/replies, any Jira change    | List the exact actions, wait for OK, then run them and verify   |
-| Never                 | Push to the default branch, mark a PR ready, force-push, `reset --hard`, discard or stash unexplained work | Refuse and explain |
+| Tier               | Examples                                                                                                   | Rule                                                          |
+| ------------------ | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| Local              | Read, edit, test, create/switch a branch                                                                   | Go ahead                                                      |
+| Local history      | Commit on a feature branch                                                                                 | Only once the human has handed over autonomy, or asks         |
+| Leaves the machine | Push, create/edit PR, PR comments/replies, any Jira change                                                 | List the exact actions, wait for OK, then run them and verify |
+| Never              | Push to the default branch, mark a PR ready, force-push, `reset --hard`, discard or stash unexplained work | Refuse and explain                                            |
 
 - Running a command whose whole purpose is publishing (`/scbd-dev-pr`) still shows the itemised
   actions first. One confirmation covers the whole list, and the human can edit it.

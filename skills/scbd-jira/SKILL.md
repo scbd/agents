@@ -18,12 +18,12 @@ anything; if it fails, stop and tell the human to run `acli jira auth login`.
 
 Ask for only the fields the task needs. Never fetch `*all` or full payloads.
 
-| Task                          | Fields                                                          |
-| ------------------------------ | ---------------------------------------------------------------- |
-| Does the ticket/epic exist?    | `summary,status`                                                |
-| Epic child inventory           | `summary,status`                                                |
-| Candidate assessment           | `summary,status,labels,components,assignee,issuelinks`          |
-| Selected-ticket planning/review | add `description,comment`                                      |
+| Task                            | Fields                                                 |
+| ------------------------------- | ------------------------------------------------------ |
+| Does the ticket/epic exist?     | `summary,status`                                       |
+| Epic child inventory            | `summary,status`                                       |
+| Candidate assessment            | `summary,status,labels,components,assignee,issuelinks` |
+| Selected-ticket planning/review | add `description,comment`                              |
 
 Compact search results into rows before showing them or writing them to a handoff:
 
@@ -70,12 +70,12 @@ labels` to confirm the result before reporting success.
 
 ## Status meanings
 
-| Status        | Meaning                                                        |
-| ------------- | ---------------------------------------------------------------- |
+| Status        | Meaning                                                                                  |
+| ------------- | ---------------------------------------------------------------------------------------- |
 | `To Do`       | Not started. Eligible for `/scbd-dev-start` when unblocked and carrying the intake label |
-| `In Progress` | Planning or implementation is active                            |
-| `Peer Review` | An open PR is the source of truth for the work                  |
-| `Done`        | The matching PR is merged, or the work was explicitly closed    |
+| `In Progress` | Planning or implementation is active                                                     |
+| `Peer Review` | An open PR is the source of truth for the work                                           |
+| `Done`        | The matching PR is merged, or the work was explicitly closed                             |
 
 Status names are case-sensitive as written above. The default intake label is `ready-for-agent`;
 swap it for `ready-for-human` once implementation is published (see `scbd-dev-pr`).
