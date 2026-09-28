@@ -100,7 +100,7 @@ fails, use `gh repo view --json defaultBranchRef -q .defaultBranchRef.name`. Ski
 ```
 
 Before first writing to `.scratch/`, run `git check-ignore -q .scratch`. If the directory is not
-ignored, say so once and point to this README's global-ignore install step. Never edit `.gitignore`
+ignored, say so once and point to `skills/README.md`'s global-ignore install step. Never edit `.gitignore`
 without being asked. Explicit-path staging is the real safeguard; the ignore only removes noise.
 
 ### Delegation
