@@ -1,6 +1,6 @@
 ---
 name: scbd-dev-start
-description: Start work on a Jira ticket, pick the next ready ticket from an epic, or start ticketless work — moves the ticket to In Progress, assigns it, and creates the feature branch. Use for "let's start on DEV-123", "what's next in this epic", or beginning work with no ticket at all.
+description: Start work on a Jira ticket, pick the next ready ticket from an epic, or start ticketless work — moves the ticket to In Progress, assigns it, and creates the feature branch. Use for "let's start on DEV-123", "pick up the next ticket in this epic", or beginning work with no ticket at all.
 ---
 
 # scbd-dev-start
