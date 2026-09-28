@@ -7,13 +7,14 @@ description: Address review feedback on your own pull request — triage comment
 
 Work through one review cycle on a PR you opened: triage, fix, verify, and reply.
 
-**Usage:** `/scbd-dev-feedback [<jira-key> | <pr-number>]`
+**Usage:** `/scbd-dev-feedback [<jira-key> | <pr-number>] [yes]`
 
 ## Before you start
 
 Load `scbd-dev-agent` for the shared ground rules. Regardless:
 
-- Nothing leaves the machine (push, PR, comments, Jira) without listing the actions and getting OK.
+- Commits, pushes, PRs, replies and Jira changes pass a checkpoint (`scbd-github`, `scbd-jira`).
+  With no preference set, ask before anything leaves the machine.
 - Never push to the default branch, mark a PR ready, force-push, or discard unexplained work.
 - Stage explicit paths only; never stage `.scratch/`.
 
@@ -31,7 +32,7 @@ agent" rule.
 ## Work
 
 - Fix and verify.
-- Commit under `scbd-dev-agent`'s action policy.
+- Commit under the `git.commit` checkpoint (`scbd-github`).
 - Feedback on a plan updates the plan file only, not code.
 
 ## Replies
@@ -46,5 +47,6 @@ Not implemented - <reason>. #done
 
 ## Publish
 
-Show the push and the replies as one itemised list. After OK, post them and verify. Jira status is
-left unchanged.
+List the push and the replies. They pass the `github.push` and `github.reply` checkpoints
+(`scbd-github`). Running this command is a direct request for both, so `invoked` goes ahead. Where a
+checkpoint needs OK, show the list and wait. Post, then verify. Jira status is left unchanged.

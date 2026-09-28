@@ -65,6 +65,8 @@ PR body template:
 Closes [<jira-key>](<jira-url>) <if part of an epic: from epic [<epic-key>](<jira-url>)>
 ```
 
+With no ticket, replace the `## Summary` line with one sentence on why there is none.
+
 Drop the `## User-Facing Changes` section entirely when the change has no user-facing effect. If
 `/scbd-dev-screenshot` produced placeholders, include them under that heading — see its skill for
 the placeholder format. Files are never uploaded by an agent; the human drags them into the PR
@@ -133,9 +135,55 @@ GitHub login for the authenticated account:
 gh api user -q .login
 ```
 
-## Action policy
+## Checkpoints
 
-Branch creation and local commits (once the human has handed over autonomy, or asks) go ahead.
-Pushing, creating or editing a PR, and posting comments or replies: list the exact actions, wait for
-OK, then run them and verify the result. For dev work, this is `scbd-dev-agent`'s action policy;
-this skill also stands alone for ad-hoc requests.
+Reads, and creating or switching branches, go ahead. Every other git or GitHub change passes a
+checkpoint, whether a `scbd-dev-*` command or an ad-hoc request triggers it.
+
+| Key            | Covers                                        | Default   |
+| -------------- | --------------------------------------------- | --------- |
+| `git.commit`   | Local commits on a feature branch             | `invoked` |
+| `github.push`  | Pushing a feature branch                      | `ask`     |
+| `github.pr`    | Creating or editing a draft PR, and its push  | `ask`     |
+| `github.reply` | PR comments and review replies                | `ask`     |
+
+`git: <mode>` or `github: <mode>` sets every checkpoint of that system. A full key overrides it.
+
+Modes:
+
+- `ask`: list the exact actions, wait for OK, then run them.
+- `invoked`: go ahead when the human asked for this action directly: by command (`/scbd-dev-pr`), in
+  words ("open a PR"), or by handing over a task that includes it ("work towards X, commit as you
+  go"). Otherwise ask.
+- `auto`: go ahead, even when you decide on the action yourself.
+
+In every mode, verify the result and report exactly what ran.
+
+Hard limits, whatever any preference says: never push to the default branch, mark a PR ready,
+force-push, `reset --hard`, or discard or stash unexplained work.
+
+## Preferences
+
+Resolve each checkpoint's mode:
+
+1. An instruction from the human in this conversation wins, including a `yes` argument on a
+   command. It lasts for the session.
+2. Otherwise take the human's preferences file, `~/.config/scbd-agents/preferences.md`, or the
+   default above.
+3. Then apply the project's `AGENTS.md` (`scbd_checkpoints:`) as a floor: where it is stricter
+   (`auto` → `invoked` → `ask`), use it.
+
+```markdown
+# SCBD agent preferences
+
+- github.pr: invoked
+- git.commit: auto
+- jira: ask
+- Free-text preferences are fine too, e.g. "run the full test suite before any push".
+```
+
+If your persistent memory holds a checkpoint preference the file lacks, follow it and offer to add it
+to the file. If memory and the file disagree, follow the file and mention the mismatch once.
+
+When the human says not to ask again (or to always ask), offer to write the matching line to the
+file. Show the line, and create the file if it's missing.

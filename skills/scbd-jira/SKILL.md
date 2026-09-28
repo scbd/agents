@@ -113,8 +113,33 @@ acli jira workitem search --jql "assignee = currentUser()" --fields assignee --j
 (`.fields.assignee.displayName` on the first result if you're currently assigned something; if
 nothing is assigned, ask the human for their display name instead of guessing.)
 
-## Action policy
+## Checkpoint
 
-Reads run freely. Every transition, assignment, label change, comment, and link: list the exact
-`acli` calls, wait for the human's OK, then run them and read the result back to confirm. For dev
-work, this is `scbd-dev-agent`'s action policy; this skill also stands alone for ad-hoc requests.
+Reads go ahead. Every transition, assignment, label change, comment, and link passes the `jira`
+checkpoint, whether a `scbd-dev-*` command or an ad-hoc request triggers it. Default: `ask`.
+
+Modes:
+
+- `ask`: list the exact `acli` calls, wait for OK, then run them.
+- `invoked`: go ahead when the human asked for this change directly, by command or in words ("move
+  DEV-12 to Peer Review"). Otherwise ask.
+- `auto`: go ahead, even when you decide on the change yourself.
+
+In every mode, read the result back to confirm it, and report exactly what ran.
+
+## Preferences
+
+Resolve the `jira` mode:
+
+1. An instruction from the human in this conversation wins, including a `yes` argument on a
+   command. It lasts for the session.
+2. Otherwise take the human's preferences file, `~/.config/scbd-agents/preferences.md` (e.g.
+   `- jira: invoked`), or the default above.
+3. Then apply the project's `AGENTS.md` (`scbd_checkpoints:`) as a floor: where it is stricter
+   (`auto` → `invoked` → `ask`), use it.
+
+If your persistent memory holds a Jira checkpoint preference the file lacks, follow it and offer to
+add it to the file. If memory and the file disagree, follow the file and mention the mismatch once.
+
+When the human says not to ask again (or to always ask), offer to write the matching line to the
+file. Show the line, and create the file if it's missing.

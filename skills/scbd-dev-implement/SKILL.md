@@ -13,7 +13,8 @@ Build the change. Follow `karpathy-guidelines` and stop before pushing.
 
 Load `scbd-dev-agent` for the shared ground rules. Regardless:
 
-- Nothing leaves the machine (push, PR, comments, Jira) without listing the actions and getting OK.
+- Commits, pushes, PRs, replies and Jira changes pass a checkpoint (`scbd-github`, `scbd-jira`).
+  With no preference set, ask before anything leaves the machine.
 - Never push to the default branch, mark a PR ready, force-push, or discard unexplained work.
 - Stage explicit paths only; never stage `.scratch/`.
 
@@ -41,7 +42,8 @@ Delegation section). Otherwise do the work in this conversation.
 
 ## Commits
 
-Only under `scbd-dev-agent`'s action policy. Conventional Commits, one logical change per commit.
+Commits pass the `git.commit` checkpoint (`scbd-github`). Conventional Commits, one logical change
+per commit.
 
 If the plan was committed to `scbd_plan_dir` (shared for review), ask whether to remove it in the
 implementation commit.

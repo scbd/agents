@@ -7,13 +7,14 @@ description: Start work on a Jira ticket, pick the next ready ticket from an epi
 
 Pick up one piece of work and get a feature branch ready for it.
 
-**Usage:** `/scbd-dev-start [<jira-key>] [<description>]`
+**Usage:** `/scbd-dev-start [<jira-key>] [<description>] [yes]`
 
 ## Before you start
 
 Load `scbd-dev-agent` for the shared ground rules. Regardless:
 
-- Nothing leaves the machine (push, PR, comments, Jira) without listing the actions and getting OK.
+- Commits, pushes, PRs, replies and Jira changes pass a checkpoint (`scbd-github`, `scbd-jira`).
+  With no preference set, ask before anything leaves the machine.
 - Never push to the default branch, mark a PR ready, force-push, or discard unexplained work.
 - Stage explicit paths only; never stage `.scratch/`.
 
@@ -34,7 +35,8 @@ Load `scbd-dev-agent` for the shared ground rules. Regardless:
    "dirty or foreign workspace" rule.
 2. Fetch the default branch (`scbd-github`).
 3. Create `feature/<KEY>-<slug>` (or `feature/<slug>` with no ticket) from it.
-4. After OK, transition the ticket to `In Progress` and assign it with `@me` (`scbd-jira`).
+4. Transition the ticket to `In Progress` and assign it with `@me`, under the `jira` checkpoint
+   (`scbd-jira`). Running this command is a direct request, so `invoked` goes ahead.
 
 ## Report
 

@@ -30,15 +30,17 @@ one issue, or there's no ticket at all.
 
 ## Action policy
 
-| Tier               | Examples                                                                                                   | Rule                                                          |
-| ------------------ | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| Local              | Read, edit, test, create/switch a branch                                                                   | Go ahead                                                      |
-| Local history      | Commit on a feature branch                                                                                 | Only once the human has handed over autonomy, or asks         |
-| Leaves the machine | Push, create/edit PR, PR comments/replies, any Jira change                                                 | List the exact actions, wait for OK, then run them and verify |
-| Never              | Push to the default branch, mark a PR ready, force-push, `reset --hard`, discard or stash unexplained work | Refuse and explain                                            |
+Local work goes ahead: reading, editing, testing, creating or switching branches.
 
-- A command whose whole purpose is publishing still shows the itemised actions first. One
-  confirmation covers the whole list, and the human can edit it.
+Commits, pushes, PRs, replies and Jira changes each pass a checkpoint. Load `scbd-github` or
+`scbd-jira` before acting: they define the checkpoints, their modes (`ask`, `invoked`, `auto`), and
+how the human's preferences set them. When several actions need OK, list them together; one OK
+covers the list, and the human can edit it. A `yes` argument on a command counts as OK for that run.
+
+Hard limits, whatever any preference says:
+
+- Never push to the default branch, mark a PR ready, force-push, `reset --hard`, or discard or
+  stash unexplained work.
 - Stage explicit paths only. Never `git add -A` or `git add .`, and never stage `.scratch/`.
 - A dirty or foreign workspace means stop and ask. Never guess who owns the work.
 
@@ -73,13 +75,16 @@ staging is the real safeguard; the ignore only removes noise.
 
 At the end of a task, if the human corrected how it ran, offer once to save the correction:
 
-- **Personal preference** (autonomy level, commit granularity, delegation habits, verbosity): save
-  it to your persistent memory, if you keep one.
+- **Personal preference** (checkpoint modes, commit granularity, delegation habits, verbosity):
+  offer a line for the human's preferences file, `~/.config/scbd-agents/preferences.md`. Show the
+  line, and create the file if it's missing. Checkpoint lines use the keys in `scbd-github` and
+  `scbd-jira`.
 - **Project fact** (component, test commands, how to run the app and log in for screenshots): offer
   a diff to the project's `AGENTS.md`, so teammates benefit too.
 
-Read both sources first for preferences that already apply. Don't nag: offer once per correction,
-and never offer after an uncorrected run.
+Read the preferences file, the project's `AGENTS.md`, and your persistent memory first for
+preferences that already apply. Don't nag: offer once per correction, and never offer after an
+uncorrected run.
 
 ## Open-ended work
 

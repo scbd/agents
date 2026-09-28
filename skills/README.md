@@ -13,8 +13,9 @@ Two mental models are supported at once:
   the skill descriptions are written to match.
 
 Every level of autonomy, from steering one small change to "work towards the goal, commit chunks,
-check with me before publishing", is covered by one **action policy** (below): local work goes
-ahead, anything that leaves the machine is listed and confirmed first.
+check with me before publishing", is covered by **checkpoints** (below): local work goes ahead, and
+each kind of commit, push, PR, reply or Jira change asks first by default. Each person can loosen or
+tighten any checkpoint in their own preferences file.
 
 ## Development skills
 
@@ -61,8 +62,57 @@ on PR 42").
 ## Ground rules
 
 The shared rules every `scbd-dev-*` command follows — context resolution, the action policy,
-`.scratch/`, delegation, learning — live in `scbd-dev-agent`, not duplicated here. Attribution and
-default-branch discovery live in `scbd-github` and `scbd-jira`.
+`.scratch/`, delegation, learning — live in `scbd-dev-agent`, not duplicated here. Checkpoints,
+attribution and default-branch discovery live in `scbd-github` and `scbd-jira`, so planning skills
+get them too.
+
+## Checkpoints and preferences
+
+Every change to git history, GitHub or Jira passes a checkpoint:
+
+| Key            | Covers                                            | Default   |
+| -------------- | ------------------------------------------------- | --------- |
+| `git.commit`   | Local commits on a feature branch                 | `invoked` |
+| `github.push`  | Pushing a feature branch                          | `ask`     |
+| `github.pr`    | Creating or editing a draft PR, and its push      | `ask`     |
+| `github.reply` | PR comments and review replies                    | `ask`     |
+| `jira`         | Transitions, assignments, labels, comments, links | `ask`     |
+
+| Mode      | Behaviour                                                                          |
+| --------- | ---------------------------------------------------------------------------------- |
+| `ask`     | List the exact actions and wait for OK                                             |
+| `invoked` | Go ahead when the human asked for the action directly (command or words); else ask |
+| `auto`    | Go ahead, even when the agent decides on the action itself                         |
+
+`git`, `github` or `jira` alone sets every checkpoint of that system; a full key overrides it. In
+every mode the agent verifies the result and reports what ran. The hard limits never change: no push
+to the default branch, no marking a PR ready, no force-push, no discarding unexplained work.
+
+Set personal modes in `~/.config/scbd-agents/preferences.md`. The file works with any agent, and
+free-text preferences are fine too:
+
+```markdown
+# SCBD agent preferences
+
+- github.pr: invoked
+- git.commit: auto
+- Run the full test suite before any push.
+```
+
+You don't have to write it by hand: when you tell an agent "don't ask me again for this", it offers
+the matching line.
+
+How the mode is resolved:
+
+1. An instruction in the conversation wins for that session, including a `yes` argument
+   (`/scbd-dev-pr yes`).
+2. Otherwise the preferences file, else the default.
+3. A project's `AGENTS.md` can set a floor with `scbd_checkpoints:`, e.g. `github.push: ask` in a
+   repo where every push must be confirmed. The stricter of the two applies.
+
+Checkpoints control the skill's own questions. Your agent's permission system is a separate layer:
+Claude Code, for example, may still prompt before `git push` or `gh pr create` unless its
+`settings.json` allows those commands.
 
 ## Invocation examples
 
@@ -103,6 +153,14 @@ Add to the project's `AGENTS.md`:
 ```text
 scbd_component: Your/Component
 scbd_plan_dir: docs/plans
+```
+
+Optionally, require confirmation for some checkpoints in this project, whatever personal
+preferences say:
+
+```text
+scbd_checkpoints:
+  github.push: ask
 ```
 
 `scbd_component` scopes epic-queue candidate search in `scbd-dev-start` and `scbd-dev-next`.

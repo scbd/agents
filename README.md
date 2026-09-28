@@ -34,6 +34,12 @@ npx skills add scbd/agents -g
 
   A project that wants to commit `.scratch/` content can add a negation to its own `.gitignore`.
 
+## Personal preferences
+
+Each person tunes how often agents ask before committing, pushing, opening PRs, replying, or
+changing Jira in `~/.config/scbd-agents/preferences.md`. See
+[Checkpoints and preferences](skills/README.md#checkpoints-and-preferences).
+
 ## Update
 
 Keep all installed skills up to date:

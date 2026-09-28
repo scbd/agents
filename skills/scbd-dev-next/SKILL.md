@@ -13,7 +13,8 @@ Report status and recommend one next command. Changes nothing itself.
 
 Load `scbd-dev-agent` for the shared ground rules. Regardless:
 
-- Nothing leaves the machine (push, PR, comments, Jira) without listing the actions and getting OK.
+- Commits, pushes, PRs, replies and Jira changes pass a checkpoint (`scbd-github`, `scbd-jira`).
+  With no preference set, ask before anything leaves the machine.
 - Never push to the default branch, mark a PR ready, force-push, or discard unexplained work.
 - Stage explicit paths only; never stage `.scratch/`.
 
