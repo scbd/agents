@@ -35,7 +35,8 @@ Local work goes ahead: reading, editing, testing, creating or switching branches
 Commits, pushes, PRs, replies and Jira changes each pass a checkpoint. Load `scbd-github` or
 `scbd-jira` before acting: they define the checkpoints, their modes (`ask`, `invoked`, `auto`), and
 how the human's preferences set them. When several actions need OK, list them together; one OK
-covers the list, and the human can edit it. A `yes` argument on a command counts as OK for that run.
+covers the list, and the human can edit it. A mode argument on a command (`ask`, `invoked` or
+`auto`) sets every checkpoint for that run.
 
 Hard limits, whatever any preference says:
 

@@ -7,7 +7,7 @@ description: Address review feedback on your own pull request — triage comment
 
 Work through one review cycle on a PR you opened: triage, fix, verify, and reply.
 
-**Usage:** `/scbd-dev-feedback [<jira-key> | <pr-number>] [yes]`
+**Usage:** `/scbd-dev-feedback [<jira-key> | <pr-number>] [ask|invoked|auto]`
 
 ## Before you start
 

@@ -166,8 +166,9 @@ force-push, `reset --hard`, or discard or stash unexplained work.
 
 Resolve each checkpoint's mode:
 
-1. An instruction from the human in this conversation wins, including a `yes` argument on a
-   command. It lasts for the session.
+1. An instruction from the human in this conversation wins, including a mode argument on a
+   command (`ask`, `invoked` or `auto`), which applies to that run only. Other instructions last for
+   the session.
 2. Otherwise take the human's preferences file, `~/.config/scbd-agents/preferences.md`, or the
    default above.
 3. Then apply the project's `AGENTS.md` (`scbd_checkpoints:`) as a floor: where it is stricter

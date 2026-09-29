@@ -7,7 +7,7 @@ description: Create or update a draft pull request for the current branch — pu
 
 Push the branch and create or update a draft PR. Never marks a PR ready.
 
-**Usage:** `/scbd-dev-pr [<jira-key>] [yes]`
+**Usage:** `/scbd-dev-pr [<jira-key>] [ask|invoked|auto]`
 
 ## Before you start
 

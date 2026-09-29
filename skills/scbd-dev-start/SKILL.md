@@ -7,7 +7,7 @@ description: Start work on a Jira ticket, pick the next ready ticket from an epi
 
 Pick up one piece of work and get a feature branch ready for it.
 
-**Usage:** `/scbd-dev-start [<jira-key>] [<description>] [yes]`
+**Usage:** `/scbd-dev-start [<jira-key>] [<description>] [ask|invoked|auto]`
 
 ## Before you start
 

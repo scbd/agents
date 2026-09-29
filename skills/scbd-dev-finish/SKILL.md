@@ -7,7 +7,7 @@ description: Wrap up after a pull request is merged — mark the Jira ticket Don
 
 Close out a ticket once its PR has landed.
 
-**Usage:** `/scbd-dev-finish [<jira-key>] [yes]`
+**Usage:** `/scbd-dev-finish [<jira-key>] [ask|invoked|auto]`
 
 ## Before you start
 

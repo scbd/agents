@@ -104,8 +104,8 @@ the matching line.
 
 How the mode is resolved:
 
-1. An instruction in the conversation wins for that session, including a `yes` argument
-   (`/scbd-dev-pr yes`).
+1. An instruction in the conversation wins for that session, including a mode argument for
+   one run (`/scbd-dev-pr auto`, `/scbd-dev-feedback ask`).
 2. Otherwise the preferences file, else the default.
 3. A project's `AGENTS.md` can set a floor with `scbd_checkpoints:`, e.g. `github.push: ask` in a
    repo where every push must be confirmed. The stricter of the two applies.
